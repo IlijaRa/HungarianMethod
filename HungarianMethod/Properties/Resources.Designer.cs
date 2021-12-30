@@ -63,9 +63,39 @@ namespace HungarianMethod.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap generatedMatrixBackground {
+        internal static System.Drawing.Bitmap generatedMatrixBackground3x3 {
             get {
-                object obj = ResourceManager.GetObject("generatedMatrixBackground", resourceCulture);
+                object obj = ResourceManager.GetObject("generatedMatrixBackground3x3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap generatedMatrixBackground4x4 {
+            get {
+                object obj = ResourceManager.GetObject("generatedMatrixBackground4x4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap generatedMatrixBackground5x5 {
+            get {
+                object obj = ResourceManager.GetObject("generatedMatrixBackground5x5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap generatedMatrixBackground6x6 {
+            get {
+                object obj = ResourceManager.GetObject("generatedMatrixBackground6x6", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -76,6 +106,16 @@ namespace HungarianMethod.Properties {
         internal static System.Drawing.Bitmap introBackground {
             get {
                 object obj = ResourceManager.GetObject("introBackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo {
+            get {
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

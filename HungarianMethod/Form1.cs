@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,10 +27,15 @@ namespace HungarianMethod
                 int columns = Convert.ToInt32(Textbox2.Text); 
                 if (AreValuesValid(rows, columns))
                 {
-                    GeneratedMatrix gen = new GeneratedMatrix();
-                    gen.GenerateMatrix(rows, columns);
-                    gen.Show();
-                    this.Hide();
+                    if(AreRowsColsEqual(rows, columns))
+                    {
+                        GeneratedMatrix gen = new GeneratedMatrix();
+                        gen.GenerateFormWithMatrix(rows, columns);
+                        gen.Show();
+                        this.Hide();
+                    }
+                    else
+                        MessageBox.Show("Matrix need to be squared!");
                 }
                 else
                     MessageBox.Show("Values for rows and columns can be only [3, 6] !");
@@ -66,9 +72,19 @@ namespace HungarianMethod
             return valueValid;
         }
 
+        public bool AreRowsColsEqual(int rows, int columns)
+        {
+            bool valueValid = false;
+            if (rows == columns)
+            {
+                valueValid = true;
+            }
+            return valueValid;
+        }
+
         private void buttonX(object sender, EventArgs e)
         {
-            System.Windows.Forms.Application.ExitThread();
+            Application.ExitThread();
         }
     }
 }

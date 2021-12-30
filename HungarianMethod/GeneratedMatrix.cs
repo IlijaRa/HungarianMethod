@@ -17,33 +17,97 @@ namespace HungarianMethod
             InitializeComponent();
         }
 
-        public void GenerateMatrix(int rows, int columns)
+        List<TextBox> globalTextboxes = new List<TextBox>();
+
+        public void GenerateFormWithMatrix(int rows, int columns)
+        {
+            SettingUpForm(columns);
+            GenerateMatrix(rows, columns);
+        }
+        
+        // podesavanje velicine i rasporeda elemenata na osnovu broja redova i kolona
+        // podesava i velicinu forme 
+        public void SettingUpForm(int columns)
+        {
+            switch (columns)
+            {
+                case 3:
+                    //label1.Location = new Point(125, 9);
+                    this.BackgroundImage = Properties.Resources.generatedMatrixBackground3x3;
+                    break;
+                case 4:
+                    Size = new Size(670, 550);
+                    radioButton1.Location = new Point(18, 310);
+                    radioButton2.Location = new Point(18, 360);
+                    btn_back.Location = new Point(12, 448);
+                    btn_solve.Location = new Point(257, 448);
+                    btn_reset.Location = new Point(505, 448);
+                    this.BackgroundImage = Properties.Resources.generatedMatrixBackground4x4;
+                    break;
+                case 5:
+                    Size = new Size(670, 650);
+                    radioButton1.Location = new Point(18, 410);
+                    radioButton2.Location = new Point(18, 460);
+                    btn_back.Location = new Point(12, 548);
+                    btn_solve.Location = new Point(257, 548);
+                    btn_reset.Location = new Point(505, 548);
+                    this.BackgroundImage = Properties.Resources.generatedMatrixBackground5x5;
+                    break;
+                case 6:
+                    Size = new Size(770, 700);
+                    label1.Location = new Point(320, 9);
+                    radioButton1.Location = new Point(18, 460);
+                    radioButton2.Location = new Point(18, 510);
+                    btn_back.Location = new Point(12, 598);
+                    btn_solve.Location = new Point(315, 598);
+                    btn_reset.Location = new Point(605, 598);
+                    this.BackgroundImage = Properties.Resources.generatedMatrixBackground6x6;
+                    break;
+
+            }
+        }
+
+        public List<TextBox> GenerateTextboxes(int rows, int columns)
         {
 
-            // Formiranje radio buttona na odredjenoj lokaciji
-            RadioButton radio1 = new RadioButton();
-            RadioButton radio2 = new RadioButton();
-            radio1.Location = new Point(18, 265);
-            radio1.Text = "Values in matrix represent number of hours";
-            this.Controls.Add(radio1);
-            radio2.Location = new Point(18, 316);
-            radio2.Text = "Values in matrix represent quantity per hour ";
-            this.Controls.Add(radio2);
+            List<TextBox> textboxes = new List<TextBox>();
 
-            if (rows > 4)
+            for (int i = 0; i < rows * columns; i++)
             {
-                //GeneratedMatrix gen = new GeneratedMatrix();
-                //gen.Size = Size(922, 622);
-                Size = new Size(922, 522);
-                radio1.Location = new Point(18, 265);
-                radio2.Location = new Point(18, 316);
+                textboxes.Add(new TextBox());
             }
-            List<TextBox> textboxes = GenerateTextboxes(rows, columns);
-            
+
+            //// za uzimanje vrednosti iz textboxa
+            //foreach (TextBox t in list)
+            //{
+            //    StringBuilder bu = new StringBuilder();
+            //    if (t.Text != String.Empty)
+            //    {
+            //        bu.Append(t.Text, "|");
+            //    }
+            //    MessageBox.Show(bu.ToString());
+            //}
+
+            return textboxes;
+        }
+
+        public void GenerateMatrix(int rows, int columns)
+        {
             int counter = 0;
             int stop = 0;
-            int X = 20;
-            int Y = 20;
+            int X = 0;
+
+            if (columns == 3)
+                X = 150;
+            if (columns == 4)
+                X = 100;
+            if (columns == 5)
+                X = 35;
+            if (columns == 6)
+                X = 25;
+
+            int Y = 70;
+            List<TextBox> textboxes = GenerateTextboxes(rows, columns);
 
             for (int i = 0; i < rows; i++)
             {
@@ -54,12 +118,12 @@ namespace HungarianMethod
                     textboxes[counter].Height = 154;
                     textboxes[counter].Location = new Point(X, Y);
                     textboxes[counter].TextAlign = HorizontalAlignment.Center;
-                    
+
                     //textboxes[counter].Text = counter.ToString();
                     // ova dva if-a ispod farbaju prvi red i prvu kolonu
                     if (counter < columns)
                         textboxes[counter].BackColor = Color.LightBlue;
-                    if (j==0)
+                    if (j == 0)
                         textboxes[counter].BackColor = Color.LightBlue;
                     // ovo dodaje textbox u formu
                     this.Controls.Add(textboxes[counter]);
@@ -81,100 +145,41 @@ namespace HungarianMethod
 
                 // vratimo X koordinatu na pocetnu vrednost zbog sledeceg reda u matrici
                 // a Y povecamo
-                X = 20;
+                if (columns == 3)
+                    X = 150;
+                if (columns == 4)
+                    X = 100;
+                if (columns == 5)
+                    X = 35;
+                if (columns == 6)
+                    X = 25;
                 Y = Y + 60;
-
             }
+
+            // prebacujem u globalTextboxes jer global koristimo za reset vrednosti iz textboxeva
+            globalTextboxes = textboxes;
         }
+
         // Metoda koja formira Textbox-ove. Formira 36 njih jer 
         // je najveci moguci unos 6x6 = 36
-        public List<TextBox> GenerateTextboxes(int rows, int columns)
+        
+
+        private void buttonBack(object sender, EventArgs e)
         {
-            TextBox textbox1 = new TextBox();
-            TextBox textbox2 = new TextBox();
-            TextBox textbox3 = new TextBox();
-            TextBox textbox4 = new TextBox();
-            TextBox textbox5 = new TextBox();
-            TextBox textbox6 = new TextBox();
-            TextBox textbox7 = new TextBox();
-            TextBox textbox8 = new TextBox();
-            TextBox textbox9 = new TextBox();
-            TextBox textbox10 = new TextBox();
-            TextBox textbox11 = new TextBox();
-            TextBox textbox12 = new TextBox();
-            TextBox textbox13 = new TextBox();
-            TextBox textbox14 = new TextBox();
-            TextBox textbox15 = new TextBox();
-            TextBox textbox16 = new TextBox();
-            TextBox textbox17 = new TextBox();
-            TextBox textbox18 = new TextBox();
-            TextBox textbox19 = new TextBox();
-            TextBox textbox20 = new TextBox();
-            TextBox textbox21 = new TextBox();
-            TextBox textbox22 = new TextBox();
-            TextBox textbox23 = new TextBox();
-            TextBox textbox24 = new TextBox();
-            TextBox textbox25 = new TextBox();
-            TextBox textbox26 = new TextBox();
-            TextBox textbox27 = new TextBox();
-            TextBox textbox28 = new TextBox();
-            TextBox textbox29 = new TextBox();
-            TextBox textbox30 = new TextBox();
-            TextBox textbox31 = new TextBox();
-            TextBox textbox32 = new TextBox();
-            TextBox textbox33 = new TextBox();
-            TextBox textbox34 = new TextBox();
-            TextBox textbox35 = new TextBox();
-            TextBox textbox36 = new TextBox();
-
-            List<TextBox> textboxes = new List<TextBox>();
-
-            //for (int i = 1; i <= rows*columns; i++)
-            //{
-            //    TextBox textbox = (TextBox)Controls["textbox" + i];
-            //    textboxes.Add(textbox);
-            //    textBox.Text = "blank"; // Place what you want to do to every textbox here.
-            //}
-
-            textboxes.Add(textbox1);
-            textboxes.Add(textbox2);
-            textboxes.Add(textbox3);
-            textboxes.Add(textbox4);
-            textboxes.Add(textbox5);
-            textboxes.Add(textbox6);
-            textboxes.Add(textbox7);
-            textboxes.Add(textbox8);
-            textboxes.Add(textbox9);
-            textboxes.Add(textbox10);
-            textboxes.Add(textbox11);
-            textboxes.Add(textbox12);
-            textboxes.Add(textbox13);
-            textboxes.Add(textbox14);
-            textboxes.Add(textbox15);
-            textboxes.Add(textbox16);
-            textboxes.Add(textbox17);
-            textboxes.Add(textbox18);
-            textboxes.Add(textbox19);
-            textboxes.Add(textbox20);
-            textboxes.Add(textbox21);
-            textboxes.Add(textbox22);
-            textboxes.Add(textbox23);
-            textboxes.Add(textbox24);
-            textboxes.Add(textbox25);
-            textboxes.Add(textbox26);
-            textboxes.Add(textbox27);
-            textboxes.Add(textbox28);
-            textboxes.Add(textbox29);
-            textboxes.Add(textbox30);
-            textboxes.Add(textbox31);
-            textboxes.Add(textbox32);
-            textboxes.Add(textbox33);
-            textboxes.Add(textbox34);
-            textboxes.Add(textbox35);
-            textboxes.Add(textbox36);
-
-            return textboxes;
+            Form1 form = new Form1();
+            form.Show();
+            this.Hide();
         }
 
+        private void buttonReset(object sender, EventArgs e)
+        {
+            foreach (var textbox in globalTextboxes)
+                textbox.Clear();
+        }
+
+        private void buttonSolve(object sender, EventArgs e)
+        {
+
+        }
     }
 }
