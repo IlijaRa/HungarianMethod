@@ -1,0 +1,11 @@
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.csproj.AssemblyReference.cache
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.Form1.resources
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.GeneratedMatrix.resources
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.Properties.Resources.resources
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.csproj.GenerateResource.cache
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.csproj.CoreCompileInputs.cache
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\bin\Debug\HungarianMethod.exe.config
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\bin\Debug\HungarianMethod.exe
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\bin\Debug\HungarianMethod.pdb
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.exe
+C:\Users\rakoc\OneDrive\Desktop\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.pdb
