@@ -181,5 +181,11 @@ namespace HungarianMethod
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            QuickTip tip = new QuickTip();
+            tip.Show();
+        }
     }
 }
