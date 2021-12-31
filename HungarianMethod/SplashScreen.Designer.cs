@@ -30,11 +30,14 @@ namespace HungarianMethod
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashScreen));
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,7 +51,6 @@ namespace HungarianMethod
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::HungarianMethod.Properties.Resources.logo;
             this.pictureBox1.Location = new System.Drawing.Point(169, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(153, 139);
@@ -81,6 +83,25 @@ namespace HungarianMethod
             this.label2.TabIndex = 3;
             this.label2.Text = "Nikola Savic IN35/2018";
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "logo.png");
+            this.imageList1.Images.SetKeyName(1, "logo1.png");
+            this.imageList1.Images.SetKeyName(2, "logo2.png");
+            this.imageList1.Images.SetKeyName(3, "logo3.png");
+            this.imageList1.Images.SetKeyName(4, "logo4.png");
+            this.imageList1.Images.SetKeyName(5, "logo5.png");
+            this.imageList1.Images.SetKeyName(6, "logo6.png");
+            this.imageList1.Images.SetKeyName(7, "logo7.png");
+            // 
+            // timer2
+            // 
+            this.timer2.Enabled = true;
+            this.timer2.Interval = 50;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // SplashScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -107,5 +128,7 @@ namespace HungarianMethod
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Timer timer2;
     }
 }

@@ -35,6 +35,7 @@ namespace HungarianMethod
             this.label1 = new System.Windows.Forms.Label();
             this.btn_back = new System.Windows.Forms.Button();
             this.btn_reset = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // radioButton1
@@ -101,12 +102,23 @@ namespace HungarianMethod
             this.btn_reset.UseVisualStyleBackColor = false;
             this.btn_reset.Click += new System.EventHandler(this.buttonReset);
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Chocolate;
+            this.button1.Location = new System.Drawing.Point(18, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(132, 43);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Quick tip";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
             // GeneratedMatrix
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::HungarianMethod.Properties.Resources.generatedMatrixBackground3x3;
             this.ClientSize = new System.Drawing.Size(654, 461);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btn_reset);
             this.Controls.Add(this.btn_back);
             this.Controls.Add(this.label1);
@@ -131,5 +143,6 @@ namespace HungarianMethod
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btn_back;
         private System.Windows.Forms.Button btn_reset;
+        private System.Windows.Forms.Button button1;
     }
 }

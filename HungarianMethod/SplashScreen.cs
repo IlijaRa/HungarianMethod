@@ -18,7 +18,7 @@ namespace HungarianMethod
             InitializeComponent();
             progressBar1.Value = 0;
         }
-
+        
         private void timer1_Tick(object sender, EventArgs e)
         {
             progressBar1.Value += 4;
@@ -30,6 +30,15 @@ namespace HungarianMethod
                 this.Hide();
             }
         }
-
+        int imgNum = 0;
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            // sluzi za promenu slika logoa dok se pokrece
+            pictureBox1.Image = imageList1.Images[imgNum];
+            if (imgNum == imageList1.Images.Count - 1)
+                imgNum = 0;
+            else
+                imgNum++;
+        }
     }
 }
