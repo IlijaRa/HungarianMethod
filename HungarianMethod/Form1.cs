@@ -25,7 +25,7 @@ namespace HungarianMethod
             {
                 int rows = Convert.ToInt32(Textbox1.Text);
                 int columns = Convert.ToInt32(Textbox2.Text); 
-                if (AreValuesValid(rows, columns))
+                if (AreDimensionsValid(rows, columns))
                 {
                     if(AreRowsColsEqual(rows, columns))
                     {
@@ -38,7 +38,7 @@ namespace HungarianMethod
                         MessageBox.Show("Matrix need to be squared!");
                 }
                 else
-                    MessageBox.Show("Values for rows and columns can be only [3, 6] !");
+                    MessageBox.Show("Values for rows and columns can be only [4, 6] !");
             }
             else
                 MessageBox.Show("Bad input values!");
@@ -62,10 +62,10 @@ namespace HungarianMethod
 
         // proverava da li je celobrojna vrednost u rasponu od 3 do 6
         // ukljucujuci i te vrednosti
-        public bool AreValuesValid(int rows, int columns)
+        public bool AreDimensionsValid(int rows, int columns)
         {
             bool valueValid = false;
-            if ((rows >= 3 && rows <= 6) && (columns >= 3 && columns <= 6))
+            if ((rows >= 4 && rows <= 6) && (columns >= 4 && columns <= 6))
             {
                 valueValid = true;
             }

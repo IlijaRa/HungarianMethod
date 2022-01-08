@@ -18,13 +18,47 @@ namespace HungarianMethod
         }
 
         List<TextBox> globalTextboxes = new List<TextBox>();
-
+        int globalRows;
+        int globalColumns;
         public void GenerateFormWithMatrix(int rows, int columns)
         {
+            globalRows = rows;
+            globalColumns = columns;
             SettingUpForm(columns);
-            GenerateMatrix(rows, columns);
+            GenerateTextboxMatrix(rows, columns);
         }
-        
+
+        private void buttonBack(object sender, EventArgs e)
+        {
+            Form1 form = new Form1();
+            form.Show();
+            this.Hide();
+        }
+
+        private void buttonReset(object sender, EventArgs e)
+        {
+            foreach (var textbox in globalTextboxes)
+                textbox.Clear();
+        }
+
+        private void buttonSolve(object sender, EventArgs e)
+        {
+            int[,] startMatrix = new int[globalRows - 1, globalColumns - 1];
+            if (CheckIfValuesAreIntParsable())
+            {
+                CalculateZerosInColumns(GenerateStartMatrix(globalRows, globalColumns), globalColumns - 1);
+                //startMatrix = GenerateStartMatrix(globalRows, globalColumns);
+            }
+            else
+                MessageBox.Show("Denied");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            QuickTip tip = new QuickTip();
+            tip.Show();
+        }
+
         // podesavanje velicine i rasporeda elemenata na osnovu broja redova i kolona
         // podesava i velicinu forme 
         public void SettingUpForm(int columns)
@@ -91,8 +125,10 @@ namespace HungarianMethod
             return textboxes;
         }
 
-        public void GenerateMatrix(int rows, int columns)
+        public void GenerateTextboxMatrix(int rows, int columns)
         {
+            List<TextBox> textboxes = GenerateTextboxes(rows, columns);
+
             int counter = 0;
             int stop = 0;
             int X = 0;
@@ -107,7 +143,6 @@ namespace HungarianMethod
                 X = 25;
 
             int Y = 70;
-            List<TextBox> textboxes = GenerateTextboxes(rows, columns);
 
             for (int i = 0; i < rows; i++)
             {
@@ -156,36 +191,107 @@ namespace HungarianMethod
                 Y = Y + 60;
             }
 
-            // prebacujem u globalTextboxes jer global koristimo za reset vrednosti iz textboxeva
+            // prebacujem u globalTextboxes jer global koristimo za
+            // pristup textboxevima od strane ostalih metoda
             globalTextboxes = textboxes;
         }
 
-        // Metoda koja formira Textbox-ove. Formira 36 njih jer 
-        // je najveci moguci unos 6x6 = 36
-        
-
-        private void buttonBack(object sender, EventArgs e)
+        public bool CheckIfValuesAreIntParsable()
         {
-            Form1 form = new Form1();
-            form.Show();
-            this.Hide();
-        }
-
-        private void buttonReset(object sender, EventArgs e)
-        {
+            int result;
+            bool valuesAreValid = true;
             foreach (var textbox in globalTextboxes)
-                textbox.Clear();
+            {
+                if (textbox.BackColor != Color.LightBlue)
+                {
+                    int.TryParse(textbox.Text, out result);
+                    if (result == 0)
+                    {
+                        valuesAreValid = false;
+                        break;
+                    }
+                }
+            }
+            return valuesAreValid;
         }
 
-        private void buttonSolve(object sender, EventArgs e)
+        // formira matricu vrednosti koje smo uneli ali bez vrednosti plavih textboxeva
+        public int[,] GenerateStartMatrix(int rows, int columns)
         {
+            int arrayCounter = 0;
+            int[] validValues = MakingArrayOfActualValues(rows, columns);
 
+            // dimenzije umanjene za 1 jer ne racuna polja koja imaju plavu boju
+            int[,] startMatrix = new int[rows - 1, columns - 1];
+
+            for (int i = 0; i < rows - 1; i++)
+            {
+                for (int j = 0; j < columns - 1; j++)
+                {
+                    startMatrix[i, j] = validValues[arrayCounter];
+                    arrayCounter++;
+                    //Console.Write(startMatrix[i, j] + "\t");
+                }
+                //Console.WriteLine("\n");
+            }
+            return startMatrix;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        // pravi niz od vrednosti u testboxevima koji nisu plave boje
+        public int[] MakingArrayOfActualValues(int rows, int columns)
         {
-            QuickTip tip = new QuickTip();
-            tip.Show();
+            int[] actualValues = new int[rows * columns];
+            int valuesCounter = 0;
+            foreach (var textbox in globalTextboxes)
+            {
+                if (textbox.BackColor != Color.LightBlue)
+                {
+                    actualValues[valuesCounter] = Convert.ToInt32(textbox.Text);
+                    valuesCounter++;
+                }
+            }
+
+            return actualValues;
+        }
+
+        // Funkcija prima matricu i dimenziju matrica realValueDimension koja
+        // predstavlja dimenziju matrice sa pravim vrednostima; bez plavih textbox-ova
+        public void CalculateZerosInColumns(int[,] matrix, int realValueDimension)
+        {
+            int startDim = 3; // postavljena vrednost 3 kao pocetna
+            int maxDim = 5; // maximalna granica koju smo postavili za dimenziju matrice
+
+            // prolazi kroz sve vrednosti koje su dozvoljene kao dimenzije za matricu ([3, 5])
+            for (int dimension = startDim; dimension <= maxDim; dimension++)
+            {
+                if(dimension == realValueDimension)
+                {
+                    for (int i = 0; i < dimension; i++)
+                    {
+                        //trazi minimum u vrsti
+                        int min = matrix[i, 0];
+                        for (int j = 1; j < dimension; j++) // krece od 1 jer je za minimum vec uzeta pozicija na i, 0
+                        {
+                            if (matrix[i, j] < min)
+                                min = matrix[i, j];
+                        }
+
+                        //radi razliku vrednosti iz trenutne kolone sa min
+                        // matrix[i,j] - min
+                        for (int j = 0; j < dimension; j++)
+                        {
+                            matrix[i, j] -= min;
+                            Console.Write(matrix[i, j] + "\t");
+                        }
+
+                        Console.WriteLine("\n");
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
         }
     }
 }
