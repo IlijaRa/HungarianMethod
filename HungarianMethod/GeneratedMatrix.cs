@@ -20,10 +20,20 @@ namespace HungarianMethod
         List<TextBox> globalTextboxes = new List<TextBox>();
         int globalRows;
         int globalColumns;
+        int[,] matrixThroughPhases; // ova matrica ce se menjati kroz korake
+        
+        // sluzi da se zada neko kalkulisanje po redu ili koloni
+        public enum Axis
+        {
+            Rows,
+            Columns
+        }
+
         public void GenerateFormWithMatrix(int rows, int columns)
         {
             globalRows = rows;
             globalColumns = columns;
+            matrixThroughPhases = new int[rows - 1, columns - 1];// dimenzije umanjene za 1 jer ne racuna polja koja imaju plavu boju
             SettingUpForm(columns);
             GenerateTextboxMatrix(rows, columns);
         }
@@ -46,8 +56,28 @@ namespace HungarianMethod
             int[,] startMatrix = new int[globalRows - 1, globalColumns - 1];
             if (CheckIfValuesAreIntParsable())
             {
-                CalculateZerosInColumns(GenerateStartMatrix(globalRows, globalColumns), globalColumns - 1);
+                matrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
+
+                //-----> 1. Transformacija koef. matrice <-----//
+                matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Rows);                                                                       
+                matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Columns);
+
+                //-----> 2. Odredjivanje nezavisne nule <-----//
+
+                
+                //for (int i = 0; i < matrixThroughPhases.GetLength(0); i++)
+                //{
+                //    for (int j = 0; j < matrixThroughPhases.GetLength(1); j++)
+                //    {
+                //        Console.Write(matrixThroughPhases[i, j] + "\t");
+                //    }
+                //    Console.Write("\n");
+                //}
+                //Console.Write("---------------------------------------------");
+                //Console.Write("\n")                                                                             
+
                 //startMatrix = GenerateStartMatrix(globalRows, globalColumns);
+
             }
             else
                 MessageBox.Show("Denied");
@@ -215,7 +245,7 @@ namespace HungarianMethod
             return valuesAreValid;
         }
 
-        // formira matricu vrednosti koje smo uneli ali bez vrednosti plavih textboxeva
+        // formira matricu vrednosti koje smo uneli ali bez vrednosti plavih textboxeva; znaci dimenzije umanjene za 1
         public int[,] GenerateStartMatrix(int rows, int columns)
         {
             int arrayCounter = 0;
@@ -254,44 +284,97 @@ namespace HungarianMethod
             return actualValues;
         }
 
-        // Funkcija prima matricu i dimenziju matrica realValueDimension koja
-        // predstavlja dimenziju matrice sa pravim vrednostima; bez plavih textbox-ova
-        public void CalculateZerosInColumns(int[,] matrix, int realValueDimension)
+        // Funkcija prima matricu i axis koji govori
+        // da li ce resavati nule po rows ili columns
+        public int[,] CalculateZerosByAxis(int[,] matrix, Axis axis)
         {
-            int startDim = 3; // postavljena vrednost 3 kao pocetna
-            int maxDim = 5; // maximalna granica koju smo postavili za dimenziju matrice
+            // transponuje
+            if (axis == Axis.Columns)
+                matrix = Transpose(matrix);
 
-            // prolazi kroz sve vrednosti koje su dozvoljene kao dimenzije za matricu ([3, 5])
-            for (int dimension = startDim; dimension <= maxDim; dimension++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                if(dimension == realValueDimension)
+                //trazi minimum po svakom redu
+                int min = matrix[i, 0];
+                for (int j = 0; j < matrix.GetLength(0); j++)
                 {
-                    for (int i = 0; i < dimension; i++)
-                    {
-                        //trazi minimum u vrsti
-                        int min = matrix[i, 0];
-                        for (int j = 1; j < dimension; j++) // krece od 1 jer je za minimum vec uzeta pozicija na i, 0
-                        {
-                            if (matrix[i, j] < min)
-                                min = matrix[i, j];
-                        }
-
-                        //radi razliku vrednosti iz trenutne kolone sa min
-                        // matrix[i,j] - min
-                        for (int j = 0; j < dimension; j++)
-                        {
-                            matrix[i, j] -= min;
-                            Console.Write(matrix[i, j] + "\t");
-                        }
-
-                        Console.WriteLine("\n");
-                    }
+                    if (matrix[i, j] < min)
+                        min = matrix[i, j];
                 }
-                else
+
+                //radi razliku vrednosti sa min
+                for (int j = 0; j < matrix.GetLength(0); j++)
                 {
-                    continue;
+                    matrix[i, j] -= min;
                 }
             }
+
+            // vraca matricu u prvobitnu orijentaciju
+            if (axis == Axis.Columns)
+                matrix = Transpose(matrix);
+
+            return matrix;
         }
+
+        // funkcija koja transponuje matricu
+        public int[,] Transpose(int[,] matrix)
+        {
+            int w = matrix.GetLength(0);
+            int h = matrix.GetLength(1);
+
+            int[,] result = new int[h, w];
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    result[j, i] = matrix[i, j];
+                }
+            }
+            return result;
+        }
+
+        //public int[,] IndependentZeros(int[,] matrix)
+        //{
+
+        //    string[,] stringMatrix = ConvertToStringMatrix(matrix);
+
+        //    for (int i = 0; i < stringMatrix.GetLength(0); i++)
+        //    {
+        //        int zeroCounter = 0;
+        //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
+        //        {
+        //            if (stringMatrix[i, j].Equals(0)) 
+        //            {
+        //                zeroCounter++;
+        //            }
+        //        }
+
+        //        if(zeroCounter == 1)
+        //        {
+        //            for (int j = 0; j < stringMatrix.GetLength(0); j++)
+        //            {
+        //                if (stringMatrix[i, j].Equals(0))
+        //                    stringMatrix[i, j] = "/";
+        //            }
+        //        }
+        //    }
+        //    return matrix;
+        //}
+
+        //public string[,] ConvertToStringMatrix(int[,] matrix)
+        //{
+        //    string[,] stringMatrix = new string[matrix.GetLength(0), matrix.GetLength(1)];
+
+        //    for (int i = 0; i < matrix.GetLength(0); i++)
+        //    {
+        //        for (int j = 0; j < matrix.GetLength(0); j++)
+        //        {
+        //            stringMatrix[i,j] = Convert.ToString(matrix[i,j]);
+        //        }
+        //    }
+
+        //    return stringMatrix;
+        //}
     }
 }
