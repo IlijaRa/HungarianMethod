@@ -53,7 +53,6 @@ namespace HungarianMethod
 
         private void buttonSolve(object sender, EventArgs e)
         {
-            int[,] startMatrix = new int[globalRows - 1, globalColumns - 1];
             if (CheckIfValuesAreIntParsable())
             {
                 matrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
@@ -63,20 +62,7 @@ namespace HungarianMethod
                 matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Columns);
 
                 //-----> 2. Odredjivanje nezavisne nule <-----//
-
-                
-                //for (int i = 0; i < matrixThroughPhases.GetLength(0); i++)
-                //{
-                //    for (int j = 0; j < matrixThroughPhases.GetLength(1); j++)
-                //    {
-                //        Console.Write(matrixThroughPhases[i, j] + "\t");
-                //    }
-                //    Console.Write("\n");
-                //}
-                //Console.Write("---------------------------------------------");
-                //Console.Write("\n")                                                                             
-
-                //startMatrix = GenerateStartMatrix(globalRows, globalColumns);
+                //TODO:
 
             }
             else
@@ -226,6 +212,7 @@ namespace HungarianMethod
             globalTextboxes = textboxes;
         }
 
+        // proverava da li se unete vrednosti mogu pretvoriti u int vrednosti
         public bool CheckIfValuesAreIntParsable()
         {
             int result;
@@ -334,47 +321,47 @@ namespace HungarianMethod
             return result;
         }
 
-        //public int[,] IndependentZeros(int[,] matrix)
-        //{
+        // Ne brisi ove komentarisane funkcije
+        /*public int[,] IndependentZeros(int[,] matrix)
+        {
+            string[,] stringMatrix = ConvertToStringMatrix(matrix);
 
-        //    string[,] stringMatrix = ConvertToStringMatrix(matrix);
+            for (int i = 0; i < stringMatrix.GetLength(0); i++)
+            {
+                int zeroCounter = 0;
+                for (int j = 0; j < stringMatrix.GetLength(0); j++)
+                {
+                    if (stringMatrix[i, j].Equals(0))
+                    {
+                        zeroCounter++;
+                    }
+                }
 
-        //    for (int i = 0; i < stringMatrix.GetLength(0); i++)
-        //    {
-        //        int zeroCounter = 0;
-        //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
-        //        {
-        //            if (stringMatrix[i, j].Equals(0)) 
-        //            {
-        //                zeroCounter++;
-        //            }
-        //        }
+                if (zeroCounter == 1)
+                {
+                    for (int j = 0; j < stringMatrix.GetLength(0); j++)
+                    {
+                        if (stringMatrix[i, j].Equals(0))
+                            stringMatrix[i, j] = "/";
+                    }
+                }
+            }
+            return matrix;
+        }
 
-        //        if(zeroCounter == 1)
-        //        {
-        //            for (int j = 0; j < stringMatrix.GetLength(0); j++)
-        //            {
-        //                if (stringMatrix[i, j].Equals(0))
-        //                    stringMatrix[i, j] = "/";
-        //            }
-        //        }
-        //    }
-        //    return matrix;
-        //}
+        public string[,] ConvertToStringMatrix(int[,] matrix)
+        {
+            string[,] stringMatrix = new string[matrix.GetLength(0), matrix.GetLength(1)];
 
-        //public string[,] ConvertToStringMatrix(int[,] matrix)
-        //{
-        //    string[,] stringMatrix = new string[matrix.GetLength(0), matrix.GetLength(1)];
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    stringMatrix[i, j] = Convert.ToString(matrix[i, j]);
+                }
+            }
 
-        //    for (int i = 0; i < matrix.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < matrix.GetLength(0); j++)
-        //        {
-        //            stringMatrix[i,j] = Convert.ToString(matrix[i,j]);
-        //        }
-        //    }
-
-        //    return stringMatrix;
-        //}
+            return stringMatrix;
+        }*/
     }
 }
