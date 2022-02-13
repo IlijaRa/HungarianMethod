@@ -43,6 +43,7 @@ namespace HungarianMethod
             this.Textbox1.Name = "Textbox1";
             this.Textbox1.Size = new System.Drawing.Size(154, 38);
             this.Textbox1.TabIndex = 0;
+            this.Textbox1.Text = "6";
             // 
             // label1
             // 
@@ -82,6 +83,7 @@ namespace HungarianMethod
             this.Textbox2.Name = "Textbox2";
             this.Textbox2.Size = new System.Drawing.Size(154, 38);
             this.Textbox2.TabIndex = 3;
+            this.Textbox2.Text = "6";
             // 
             // Form1
             // 

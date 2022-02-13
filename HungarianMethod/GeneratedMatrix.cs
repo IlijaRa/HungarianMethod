@@ -56,12 +56,19 @@ namespace HungarianMethod
             if (CheckIfValuesAreIntParsable())
             {
                 matrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
+                //printMatrix(matrixThroughPhases);
 
                 //-----> 1. Transformacija koef. matrice <-----//
-                matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Rows);                                                                       
+                matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Rows);
+                //printMatrix(matrixThroughPhases);
+
                 matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Columns);
+                //printMatrix(matrixThroughPhases);
 
                 //-----> 2. Odredjivanje nezavisne nule <-----//
+                string[,] stringMatrixThroughPhases = ConvertMatrixToStringMatrix(matrixThroughPhases);
+                stringMatrixThroughPhases = FindIndependentZeros(stringMatrixThroughPhases);
+                printMatrixString(stringMatrixThroughPhases);
                 //TODO:
 
             }
@@ -126,17 +133,35 @@ namespace HungarianMethod
             {
                 textboxes.Add(new TextBox());
             }
+            textboxes[7].Text = "10";
+            textboxes[8].Text = "4";
+            textboxes[9].Text = "6";
+            textboxes[10].Text = "10";
+            textboxes[11].Text = "12";
 
-            //// za uzimanje vrednosti iz textboxa
-            //foreach (TextBox t in list)
-            //{
-            //    StringBuilder bu = new StringBuilder();
-            //    if (t.Text != String.Empty)
-            //    {
-            //        bu.Append(t.Text, "|");
-            //    }
-            //    MessageBox.Show(bu.ToString());
-            //}
+            textboxes[13].Text = "11";
+            textboxes[14].Text = "7";
+            textboxes[15].Text = "7";
+            textboxes[16].Text = "9";
+            textboxes[17].Text = "14";
+
+            textboxes[19].Text = "13";
+            textboxes[20].Text = "8";
+            textboxes[21].Text = "12";
+            textboxes[22].Text = "14";
+            textboxes[23].Text = "15";
+
+            textboxes[25].Text = "14";
+            textboxes[26].Text = "16";
+            textboxes[27].Text = "13";
+            textboxes[28].Text = "17";
+            textboxes[29].Text = "1";
+
+            textboxes[31].Text = "17";
+            textboxes[32].Text = "11";
+            textboxes[33].Text = "17";
+            textboxes[34].Text = "20";
+            textboxes[35].Text = "19";
 
             return textboxes;
         }
@@ -251,6 +276,9 @@ namespace HungarianMethod
                 }
                 //Console.WriteLine("\n");
             }
+
+            //printMatrix(startMatrix);
+
             return startMatrix;
         }
 
@@ -300,6 +328,7 @@ namespace HungarianMethod
             if (axis == Axis.Columns)
                 matrix = Transpose(matrix);
 
+            //printMatrix(matrix);
             return matrix;
         }
 
@@ -321,35 +350,37 @@ namespace HungarianMethod
             return result;
         }
 
-        // Ne brisi ove komentarisane funkcije
-        /*public int[,] IndependentZeros(int[,] matrix)
+        public void printMatrix(int[,] matrix)
         {
-            string[,] stringMatrix = ConvertToStringMatrix(matrix);
-
-            for (int i = 0; i < stringMatrix.GetLength(0); i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                int zeroCounter = 0;
-                for (int j = 0; j < stringMatrix.GetLength(0); j++)
+                for (int j = 0; j < matrix.GetLength(0); j++)
                 {
-                    if (stringMatrix[i, j].Equals(0))
-                    {
-                        zeroCounter++;
-                    }
+                    Console.Write(matrix[i, j] + "\t");
                 }
-
-                if (zeroCounter == 1)
-                {
-                    for (int j = 0; j < stringMatrix.GetLength(0); j++)
-                    {
-                        if (stringMatrix[i, j].Equals(0))
-                            stringMatrix[i, j] = "/";
-                    }
-                }
+                Console.WriteLine("\n");
             }
-            return matrix;
+            Console.WriteLine("\n");
+            Console.WriteLine("-----------------------------------------------------------------");
+            Console.WriteLine("\n");
         }
 
-        public string[,] ConvertToStringMatrix(int[,] matrix)
+        public void printMatrixString(string[,] matrix)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    Console.Write(matrix[i, j] + "\t");
+                }
+                Console.WriteLine("\n");
+            }
+            Console.WriteLine("\n");
+            Console.WriteLine("-----------------------------------------------------------------");
+            Console.WriteLine("\n");
+        }
+
+        public string[,] ConvertMatrixToStringMatrix(int[,] matrix)
         {
             string[,] stringMatrix = new string[matrix.GetLength(0), matrix.GetLength(1)];
 
@@ -362,6 +393,193 @@ namespace HungarianMethod
             }
 
             return stringMatrix;
-        }*/
+        }
+
+        public string[,] FindIndependentZeros(string[,] stringMatrix)
+        {
+            //string[,] independentZerosCoordinates = new string[stringMatrix.GetLength(0),2];
+            //int independentZerosCounter = 0;
+
+            //for (int i = 0; i < stringMatrix.GetLength(0); i++)
+            //{
+            //    int zeroCounter = 0;
+            //    // prolazi kroz vrstu i broji koliko nula ima u njoj
+            //    for (int j = 0; j < stringMatrix.GetLength(0); j++)
+            //    {
+            //        if (stringMatrix[i, j] == "0")
+            //        {
+            //            zeroCounter++;
+            //        }
+            //    }
+
+            //    // ako je pronasao samo jednu nulu u vrsti,
+            //    // uzece njene koordinate i smestiti u matricu "independentZerosCoordinates"
+            //    if (zeroCounter == 1)
+            //    {
+            //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
+            //        {
+            //            if (stringMatrix[i, j] == "0")
+            //            {
+            //                stringMatrix[i, j] = "/O/";
+            //                ScratchZerosInTheSameRowAndColumn(stringMatrix, i, j);
+            //            }
+            //        }
+                    
+            //        //for (int j = 0; j < stringMatrix.GetLength(0); j++)
+            //        //{
+            //        //    if (stringMatrix[i, j] == "0") 
+            //        //    {
+            //        //        stringMatrix[i, j] = "/O/";
+            //        //        //independentZerosCoordinates[independentZerosCounter, 0] = i.ToString();
+            //        //        //independentZerosCoordinates[independentZerosCounter, 1] = j.ToString();
+            //        //        //independentZerosCounter++;
+
+            //        //        for (int row = 1; row < stringMatrix.GetLength(0); row++)
+            //        //        {
+            //        //            if (stringMatrix[row, j] == "0")
+            //        //                stringMatrix[row, j] = "/";
+            //        //        }
+
+            //        //    }
+            //        //}
+            //    }
+            //}
+
+            List<int> priority = new List<int>();
+            for (int i = 1; i < globalRows - 1; i++)
+                priority.Add(i);
+
+            foreach(var numberOfZerosPerRow in priority)
+            {
+                for (int i = 0; i < stringMatrix.GetLength(0); i++)
+                {
+                    int zeroCounter = 0;
+                    // prolazi kroz vrstu i broji koliko nula ima u njoj
+                    for (int j = 0; j < stringMatrix.GetLength(0); j++)
+                    {
+                        if (stringMatrix[i, j] == "0")
+                        {
+                            zeroCounter++;
+                        }
+                    }
+
+                    // ako je pronasao samo jednu nulu u vrsti,
+                    // uzece njene koordinate i smestiti u matricu "independentZerosCoordinates"
+                    if (zeroCounter == numberOfZerosPerRow)
+                    {
+                        for (int j = 0; j < stringMatrix.GetLength(0); j++)
+                        {
+                            if (stringMatrix[i, j] == "0")
+                            {
+                                stringMatrix[i, j] = "/O/";
+                                ScratchZerosInTheSameRowAndColumn(stringMatrix, i, j);
+                            }
+                        }
+                    }
+                }
+
+                // sluzi za dobijanje vrsta u kojima se ne nalazi samo 1 nula
+                List<int> lista = new List<int>();
+                int IndependentZeroCounter = 0;
+
+                for (int i = 0; i < stringMatrix.GetLength(0); i++)
+                {
+                    for (int j = 0; j < stringMatrix.GetLength(0); j++)
+                    {
+                        if (stringMatrix[i, j] == "/O/")
+                            IndependentZeroCounter++;
+                    }
+                    if (!(IndependentZeroCounter == numberOfZerosPerRow))
+                    {
+                        if(!lista.Contains(i))
+                            lista.Add(i);
+                    }
+                    IndependentZeroCounter = 0;
+                }
+
+            }
+
+
+
+
+
+
+
+
+            //// sluzi za dobijanje vrsta u kojima se ne nalazi samo 1 nula
+            //List<int> lista = new List<int>();
+            //int IndZeroCnt = 0;
+
+
+
+            //// trazi sledecu vrstu koja ima 2 nule u sebi
+            //int zeroCnt2 = 0;
+            //for(int i = 0; i < lista.Count(); i++)
+            //{
+            //    for(int j=0; j < stringMatrix.GetLength(0); j++)
+            //    {
+            //        if (stringMatrix[lista[i], j] == "0")
+            //            zeroCnt2++;
+            //    }
+
+            //    if (zeroCnt2 == 2)
+            //    {
+            //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
+            //        {
+            //            if (stringMatrix[lista[i], j] == "0")
+            //            {
+            //                stringMatrix[lista[i], j] = "/O/";
+            //                ScratchZerosInTheSameRowAndColumn(stringMatrix, lista[i], j);
+            //            }
+            //        }
+            //    }
+            //}
+
+            //// trazi sledecu vrstu koja ima 3 nule u sebi
+            //int zeroCnt3 = 0;
+            //for (int i = 0; i < lista.Count(); i++)
+            //{
+            //    for (int j = 0; j < stringMatrix.GetLength(0); j++)
+            //    {
+            //        if (stringMatrix[lista[i], j] == "0")
+            //            zeroCnt3++;
+            //    }
+
+            //    if (zeroCnt3 == 3)
+            //    {
+            //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
+            //        {
+            //            if (stringMatrix[lista[i], j] == "0")
+            //            {
+            //                stringMatrix[lista[i], j] = "/O/";
+            //                ScratchZerosInTheSameRowAndColumn(stringMatrix, lista[i], j);
+            //            }
+            //        }
+            //    }
+            //}
+
+            return stringMatrix;
+        }
+
+        public void ScratchZerosInTheSameRowAndColumn(string[,] stringMatrix, int x_coord, int y_coord)
+        {
+
+            for (int i = 0; i < stringMatrix.GetLength(0); i++)
+            {
+                if (stringMatrix[i, y_coord] == "0" && i != x_coord)
+                {
+                    stringMatrix[i, y_coord] = "/";
+                }
+            }
+
+            for (int j = 0; j < stringMatrix.GetLength(0); j++)
+            {
+                if (stringMatrix[x_coord, j] == "0" && j != y_coord)
+                {
+                    stringMatrix[x_coord, j] = "/";
+                }
+            }
+
+        }
     }
 }
