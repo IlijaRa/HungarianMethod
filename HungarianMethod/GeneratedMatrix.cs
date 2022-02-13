@@ -21,7 +21,7 @@ namespace HungarianMethod
         int globalRows;
         int globalColumns;
         int[,] matrixThroughPhases; // ova matrica ce se menjati kroz korake
-        
+
         // sluzi da se zada neko kalkulisanje po redu ili koloni
         public enum Axis
         {
@@ -55,22 +55,36 @@ namespace HungarianMethod
         {
             if (CheckIfValuesAreIntParsable())
             {
-                matrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
-                //printMatrix(matrixThroughPhases);
-
+                int[,] matrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
                 //-----> 1. Transformacija koef. matrice <-----//
                 matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Rows);
-                //printMatrix(matrixThroughPhases);
-
                 matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Columns);
-                //printMatrix(matrixThroughPhases);
 
                 //-----> 2. Odredjivanje nezavisne nule <-----//
-                string[,] stringMatrixThroughPhases = ConvertMatrixToStringMatrix(matrixThroughPhases);
+                string[,] stringMatrixThroughPhases = ConvertIntMatrixToStringMatrix(matrixThroughPhases);
                 stringMatrixThroughPhases = FindIndependentZeros(stringMatrixThroughPhases);
-                printMatrixString(stringMatrixThroughPhases);
-                //TODO:
 
+                //-----> 3. Oznaciti sve vrste koje nemaju nezavisne 0 <-----//
+                List<int> markedRows = MarkRowsWithoutIndependentZero(stringMatrixThroughPhases);
+
+                //-----> 4. Precrtati sve kolone koje imaju nulu u oznacenim redovima. <-----//
+                List<int> scratchedColumns = MarkColsWhereRowIsZero(stringMatrixThroughPhases, markedRows);
+                stringMatrixThroughPhases = ScratchColsWhereRowIsZero(stringMatrixThroughPhases, scratchedColumns);
+
+                //-----> 5. Oznaciti sve vrste koje imaju nezavisnu nulu u precrtanim kolonama. <-----//
+                List<int> AllMarkedRows = MarkRowsWithIndependentZerosInScratchedCols(stringMatrixThroughPhases, scratchedColumns, markedRows);
+
+                //-----> 6. Precrtati sve neoznacene kolone. <-----//
+                stringMatrixThroughPhases = ScratchUnmarkedColumns(stringMatrixThroughPhases, AllMarkedRows);
+
+                //-----> 7. Sve neprecrtane smanjujemo za vrednost najmanjeg broja od neprecrtanih,
+                //dok vrednost na preseku precrtane kol i reda povecavamo za taj broj. <-----//
+                stringMatrixThroughPhases = SubtractMinimumWithUnscratchedValues(stringMatrixThroughPhases);
+                stringMatrixThroughPhases = AddMinimumToCrossScratchPositions(stringMatrixThroughPhases);
+                stringMatrixThroughPhases = RewriteOneTimeScratchPositions(stringMatrixThroughPhases);
+
+
+                printMatrixString(stringMatrixThroughPhases);
             }
             else
                 MessageBox.Show("Denied");
@@ -81,6 +95,58 @@ namespace HungarianMethod
             QuickTip tip = new QuickTip();
             tip.Show();
         }
+
+        //public void HungarianMethod(int[,] matrixThroughPhases)
+       //{
+            ////-----> 1. Transformacija koef. matrice <-----//
+            //matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Rows);
+            //matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Columns);
+
+            ////-----> 2. Odredjivanje nezavisne nule <-----//
+            //string[,] stringMatrixThroughPhases = ConvertIntMatrixToStringMatrix(matrixThroughPhases);
+            //stringMatrixThroughPhases = FindIndependentZeros(stringMatrixThroughPhases);
+
+            ////-----> 3. Oznaciti sve vrste koje nemaju nezavisne 0 <-----//
+            //List<int> markedRows = MarkRowsWithoutIndependentZero(stringMatrixThroughPhases);
+
+            ////-----> 4. Precrtati sve kolone koje imaju nulu u oznacenim redovima. <-----//
+            //List<int> scratchedColumns = MarkColsWhereRowIsZero(stringMatrixThroughPhases, markedRows);
+            //stringMatrixThroughPhases = ScratchColsWhereRowIsZero(stringMatrixThroughPhases, scratchedColumns);
+
+            ////-----> 5. Oznaciti sve vrste koje imaju nezavisnu nulu u precrtanim kolonama. <-----//
+            //List<int> AllMarkedRows = MarkRowsWithIndependentZerosInScratchedCols(stringMatrixThroughPhases, scratchedColumns, markedRows);
+
+            ////-----> 6. Precrtati sve neoznacene kolone. <-----//
+            //stringMatrixThroughPhases = ScratchUnmarkedColumns(stringMatrixThroughPhases, AllMarkedRows);
+
+            ////-----> 7. Sve neprecrtane smanjujemo za vrednost najmanjeg broja od neprecrtanih,
+            ////dok vrednost na preseku precrtane kol i reda povecavamo za taj broj. <-----//
+            //stringMatrixThroughPhases = SubtractMinimumWithUnscratchedValues(stringMatrixThroughPhases);
+            //stringMatrixThroughPhases = AddMinimumToCrossScratchPositions(stringMatrixThroughPhases);
+            //stringMatrixThroughPhases = RewriteOneTimeScratchPositions(stringMatrixThroughPhases);
+
+            // konvertovanje nazad u int matricu
+            //matrixThroughPhases = ConvertStringMatrixToIntMatrix(stringMatrixThroughPhases);
+            //stringMatrixThroughPhases = striHungarianMethod(solution);
+        //}
+
+        //public bool CheckIfAllRowsHaveIndependentZero(string[,] matrix)
+        //{
+        //    bool rowHasIndependentZero = false;
+        //    for (int i = 0; i < matrix.GetLength(0); i++)
+        //    {
+        //        for (int j = 0; j < matrix.GetLength(0); j++)
+        //        {
+        //            if (matrix[i, j] == "/O/")
+        //                rowHasIndependentZero = true;
+        //        }
+
+        //        if (rowHasIndependentZero == false)
+        //            break;
+        //    }
+
+        //    return rowHasIndependentZero;
+        //} 
 
         // podesavanje velicine i rasporeda elemenata na osnovu broja redova i kolona
         // podesava i velicinu forme 
@@ -380,7 +446,7 @@ namespace HungarianMethod
             Console.WriteLine("\n");
         }
 
-        public string[,] ConvertMatrixToStringMatrix(int[,] matrix)
+        public string[,] ConvertIntMatrixToStringMatrix(int[,] matrix)
         {
             string[,] stringMatrix = new string[matrix.GetLength(0), matrix.GetLength(1)];
 
@@ -395,61 +461,32 @@ namespace HungarianMethod
             return stringMatrix;
         }
 
+        public int[,] ConvertStringMatrixToIntMatrix(string[,] matrix)
+        {
+            int[,] intMatrix = new int[matrix.GetLength(0), matrix.GetLength(1)];
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    intMatrix[i, j] = Convert.ToInt32(matrix[i, j]);
+                }
+            }
+
+            return intMatrix;
+        }
+
         public string[,] FindIndependentZeros(string[,] stringMatrix)
         {
-            //string[,] independentZerosCoordinates = new string[stringMatrix.GetLength(0),2];
-            //int independentZerosCounter = 0;
 
-            //for (int i = 0; i < stringMatrix.GetLength(0); i++)
-            //{
-            //    int zeroCounter = 0;
-            //    // prolazi kroz vrstu i broji koliko nula ima u njoj
-            //    for (int j = 0; j < stringMatrix.GetLength(0); j++)
-            //    {
-            //        if (stringMatrix[i, j] == "0")
-            //        {
-            //            zeroCounter++;
-            //        }
-            //    }
-
-            //    // ako je pronasao samo jednu nulu u vrsti,
-            //    // uzece njene koordinate i smestiti u matricu "independentZerosCoordinates"
-            //    if (zeroCounter == 1)
-            //    {
-            //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
-            //        {
-            //            if (stringMatrix[i, j] == "0")
-            //            {
-            //                stringMatrix[i, j] = "/O/";
-            //                ScratchZerosInTheSameRowAndColumn(stringMatrix, i, j);
-            //            }
-            //        }
-                    
-            //        //for (int j = 0; j < stringMatrix.GetLength(0); j++)
-            //        //{
-            //        //    if (stringMatrix[i, j] == "0") 
-            //        //    {
-            //        //        stringMatrix[i, j] = "/O/";
-            //        //        //independentZerosCoordinates[independentZerosCounter, 0] = i.ToString();
-            //        //        //independentZerosCoordinates[independentZerosCounter, 1] = j.ToString();
-            //        //        //independentZerosCounter++;
-
-            //        //        for (int row = 1; row < stringMatrix.GetLength(0); row++)
-            //        //        {
-            //        //            if (stringMatrix[row, j] == "0")
-            //        //                stringMatrix[row, j] = "/";
-            //        //        }
-
-            //        //    }
-            //        //}
-            //    }
-            //}
-
+            // priority je lista u kojoj se nalaze vrednosti od 1 do dimenzije matrice
+            // priority govori kojim redom ce gledati broj nula u vrstama
+            // prvo gleda da li u vrsti ima jedna 0, pa dve 0 itd.
             List<int> priority = new List<int>();
-            for (int i = 1; i < globalRows - 1; i++)
+            for (int i = 1; i < globalRows; i++)
                 priority.Add(i);
 
-            foreach(var numberOfZerosPerRow in priority)
+            foreach (var numberOfZerosPerRow in priority)
             {
                 for (int i = 0; i < stringMatrix.GetLength(0); i++)
                 {
@@ -463,8 +500,8 @@ namespace HungarianMethod
                         }
                     }
 
-                    // ako je pronasao samo jednu nulu u vrsti,
-                    // uzece njene koordinate i smestiti u matricu "independentZerosCoordinates"
+                    // ako je pronasao broj numberOfZerosInRow u vrsti,
+                    // 0 na kordinatama [i, j] ce prebaciti u /O/ a ostale nule po vrstama u kolonama u "/"
                     if (zeroCounter == numberOfZerosPerRow)
                     {
                         for (int j = 0; j < stringMatrix.GetLength(0); j++)
@@ -478,7 +515,8 @@ namespace HungarianMethod
                     }
                 }
 
-                // sluzi za dobijanje vrsta u kojima se ne nalazi samo 1 nula
+                // sluzi za dobijanje vrsta u kojima se ne nalazi broj nula numberOfZerosPerRow
+                // taj broj belezi u listu "lista" kako bi znao koje vise vrste da ne prolazi
                 List<int> lista = new List<int>();
                 int IndependentZeroCounter = 0;
 
@@ -491,72 +529,14 @@ namespace HungarianMethod
                     }
                     if (!(IndependentZeroCounter == numberOfZerosPerRow))
                     {
-                        if(!lista.Contains(i))
+                        // ovaj if sluzi da ne bi ubacivao vise puta istu vrstu ili kolonu u listu, nego da budu samo distinct vrednosti
+                        if (!lista.Contains(i))
                             lista.Add(i);
                     }
                     IndependentZeroCounter = 0;
                 }
 
             }
-
-
-
-
-
-
-
-
-            //// sluzi za dobijanje vrsta u kojima se ne nalazi samo 1 nula
-            //List<int> lista = new List<int>();
-            //int IndZeroCnt = 0;
-
-
-
-            //// trazi sledecu vrstu koja ima 2 nule u sebi
-            //int zeroCnt2 = 0;
-            //for(int i = 0; i < lista.Count(); i++)
-            //{
-            //    for(int j=0; j < stringMatrix.GetLength(0); j++)
-            //    {
-            //        if (stringMatrix[lista[i], j] == "0")
-            //            zeroCnt2++;
-            //    }
-
-            //    if (zeroCnt2 == 2)
-            //    {
-            //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
-            //        {
-            //            if (stringMatrix[lista[i], j] == "0")
-            //            {
-            //                stringMatrix[lista[i], j] = "/O/";
-            //                ScratchZerosInTheSameRowAndColumn(stringMatrix, lista[i], j);
-            //            }
-            //        }
-            //    }
-            //}
-
-            //// trazi sledecu vrstu koja ima 3 nule u sebi
-            //int zeroCnt3 = 0;
-            //for (int i = 0; i < lista.Count(); i++)
-            //{
-            //    for (int j = 0; j < stringMatrix.GetLength(0); j++)
-            //    {
-            //        if (stringMatrix[lista[i], j] == "0")
-            //            zeroCnt3++;
-            //    }
-
-            //    if (zeroCnt3 == 3)
-            //    {
-            //        for (int j = 0; j < stringMatrix.GetLength(0); j++)
-            //        {
-            //            if (stringMatrix[lista[i], j] == "0")
-            //            {
-            //                stringMatrix[lista[i], j] = "/O/";
-            //                ScratchZerosInTheSameRowAndColumn(stringMatrix, lista[i], j);
-            //            }
-            //        }
-            //    }
-            //}
 
             return stringMatrix;
         }
@@ -568,7 +548,7 @@ namespace HungarianMethod
             {
                 if (stringMatrix[i, y_coord] == "0" && i != x_coord)
                 {
-                    stringMatrix[i, y_coord] = "/";
+                    stringMatrix[i, y_coord] = "∅";
                 }
             }
 
@@ -576,10 +556,253 @@ namespace HungarianMethod
             {
                 if (stringMatrix[x_coord, j] == "0" && j != y_coord)
                 {
-                    stringMatrix[x_coord, j] = "/";
+                    stringMatrix[x_coord, j] = "∅";
                 }
             }
 
+        }
+
+        public List<int> MarkRowsWithoutIndependentZero(string[,] matrix)
+        {
+
+            bool rowHasIndependentZero = false;
+            List<int> RowsWithoutIndependentZero = new List<int>();
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    if (matrix[i, j] == "/O/")
+                    {
+                        rowHasIndependentZero = true;
+                        break;
+                    }
+                }
+
+                if (rowHasIndependentZero == false)
+                    RowsWithoutIndependentZero.Add(i);
+                else
+                    rowHasIndependentZero = false;
+
+
+            }
+
+            //foreach(var row in RowsWithoutIndependentZero)
+            //{
+            //    for (int j = 0; j < matrix.GetLength(0); j++)
+            //    {
+            //        matrix[row, j] = "--" + matrix[row, j] + "--";
+            //    }
+            //}
+
+            return RowsWithoutIndependentZero;
+        }
+
+        public List<int> MarkColsWhereRowIsZero(string[,] matrix, List<int> rowsWithoutIndependentZero)
+        {
+            List<int> scratchedColumns = new List<int>();
+
+            foreach (var row in rowsWithoutIndependentZero)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    if (matrix[row, j] == "∅" && !scratchedColumns.Contains(j))
+                    {
+                        scratchedColumns.Add(j);
+                    }
+                }
+            }
+            return scratchedColumns;
+        }
+        public string[,] ScratchColsWhereRowIsZero(string[,] matrix, List<int> scratchedColumns)
+        {
+            foreach (var col in scratchedColumns)
+            {
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                    // ukoliko je precrtan element, da ga ne precrtava ponovo
+                    //if(!matrix[i, col].Contains("--"))
+                    matrix[i, col] = "--" + matrix[i, col] + "--";
+                }
+            }
+
+            return matrix;
+        }
+
+        // prima parametar markedRows jer je pre ovoga funkcija MarkRowsWithoutIndependentZero
+        // oznacila sve vrste koje nemaju nezavisnu nulu i vratila listu sa tim vrstama
+        // ova funkcija se nadovezuje na tu listu da doda jos one vrste koje imaju nezavisnu nulu u precrtanim kolonama
+        // s tim sto prima parametar scratchedCols kako bi znala po kojim kolonama da proverava
+        public List<int> MarkRowsWithIndependentZerosInScratchedCols(string[,] matrix, List<int> scratchedCols, List<int> markedRows)
+        {
+            foreach (var col in scratchedCols)
+            {
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                    // /O/ se menja u --/O/-- ili vise crtica tako da sredi ovo
+                    if (matrix[i, col] == "--/O/--")
+                    {
+                        markedRows.Add(i);
+                    }
+                }
+            }
+
+            return markedRows;
+        }
+
+        public string[,] ScratchUnmarkedColumns(string[,] matrix, List<int> markedRows)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                if (!markedRows.Contains(i))
+                {
+                    for (int j = 0; j < matrix.GetLength(0); j++)
+                    {
+                        //if (!matrix[i, j].Contains("--"))
+                        matrix[i, j] = "--" + matrix[i, j] + "--";
+                    }
+                }
+            }
+
+            return matrix;
+        }
+
+        public string[,] SubtractMinimumWithUnscratchedValues(string[,] matrix)
+        {
+            string[,] subtractedMatrix = SubtractValues(matrix, FindMinimum(matrix));
+
+            return subtractedMatrix;
+        }
+
+
+        public int FindMinimum(string[,] matrix)
+        {
+            //moramo postaviti za pocetni minimum neku vrednost
+            // ali mora se proveriti da li ta vrednost moze da se prebaci u int ,posto je matrixa stringova trenutno,
+            // ako ne moze, proverava sledecu vrednost i tako dok ne naidje na
+            // prvu vrednost koju moze konvertovati u int.
+            int min = 0;
+            bool startMinFound = false;
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    int.TryParse(matrix[i, j], out min);
+                    if (min != 0)
+                    {
+                        startMinFound = true;
+                        break;
+                    }
+                }
+                if (startMinFound == true)
+                    break;
+            }
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    // ova provera jer gleda samo one elemente u matrici koji nisu precrtani
+                    if (!matrix[i, j].Contains("--"))
+                    {
+                        int value = 0;
+                        int.TryParse(matrix[i, j], out value);
+                        if (value != 0)
+                        {
+                            if (value < min)
+                                min = value;
+                        }
+                    }
+                }
+            }
+
+            return min;
+        }
+
+        public string[,] SubtractValues(string[,] matrix, int minValue)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    // ova provera jer gleda samo one elemente u matrici koji nisu precrtani
+                    // i oduzima minimum od njih
+                    if (!matrix[i, j].Contains("--"))
+                    {
+                        int value = 0;
+                        int.TryParse(matrix[i, j], out value);
+                        if (value != 0)
+                        {
+                            int matrix_value = Convert.ToInt32(matrix[i, j]);
+                            matrix_value = matrix_value - minValue;
+                            matrix[i, j] = matrix_value.ToString();
+                        }
+                    }
+                }
+            }
+            return matrix;
+        }
+
+        public string[,] AddMinimumToCrossScratchPositions(string[,] matrix)
+        {
+            int minValue = FindMinimum(matrix);
+            int matrix_value = 0;
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    // ova provera gleda samo one elemente u matrici koji su unakrsno precrtani
+                    // i dodaje im minimum
+                    // ---- znaci da je 2 puta precrtana vrednost, a -- da je jednom
+                    if(matrix[i, j].StartsWith("----"))
+                    {
+                        if (matrix[i, j] == "----/O/----" || matrix[i, j] == "----∅----")
+                        {
+                            matrix_value = 0;
+                            matrix_value = matrix_value + minValue;
+                            matrix[i, j] = matrix_value.ToString();
+                        }
+
+                        else //if(matrix[i, j].StartsWith("----") && matrix[i, j].EndsWith("----"))
+                        {
+                            // otklanjamo crtice iz zapisa kako bi prebacili u int
+                            //string substring = matrix[i, j].Remove(0, 4); // uklanja prve ---- iz broja
+                            string substring = matrix[i, j].Substring(4);
+                            substring = substring.Remove(substring.Length - 4); // uklanja poslednje ---- broja
+                            matrix_value = Convert.ToInt32(substring) + minValue;
+                            matrix[i, j] = matrix_value.ToString();
+                        }
+                    }
+                }
+            }
+
+            return matrix;
+        }
+
+        public string[,] RewriteOneTimeScratchPositions(string[,] matrix)
+        {
+            int matrix_value = 0;
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    if (matrix[i, j].EndsWith("--"))
+                    {
+                        if (matrix[i, j] == "--/O/--" || matrix[i, j] == "--∅--")
+                        {
+                            matrix_value = 0;
+                            matrix[i, j] = matrix_value.ToString();
+                        }
+                        else if (!matrix[i, j].Contains("--------"))
+                        {
+                            // otklanjamo crtice iz zapisa kako bi prebacili u int
+                            string substring = matrix[i, j].Remove(0, 2); // uklanja prve -- iz broja
+                            substring = substring.Remove(substring.Length - 2); // uklanja poslednje -- broja
+                            matrix[i, j] = substring;
+                        }
+                    }
+                }
+            }
+            return matrix;
         }
     }
 }

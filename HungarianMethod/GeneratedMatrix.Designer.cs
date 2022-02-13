@@ -43,10 +43,10 @@ namespace HungarianMethod
             this.radioButton1.AutoSize = true;
             this.radioButton1.Location = new System.Drawing.Point(18, 256);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(625, 35);
+            this.radioButton1.Size = new System.Drawing.Size(286, 35);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Values represent hours needed to finish exact job";
+            this.radioButton1.Text = "Minimization problem";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // radioButton2
@@ -54,10 +54,10 @@ namespace HungarianMethod
             this.radioButton2.AutoSize = true;
             this.radioButton2.Location = new System.Drawing.Point(18, 316);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(447, 35);
+            this.radioButton2.Size = new System.Drawing.Size(293, 35);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Values represent quantity per hour";
+            this.radioButton2.Text = "Maximization problem";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // btn_solve
