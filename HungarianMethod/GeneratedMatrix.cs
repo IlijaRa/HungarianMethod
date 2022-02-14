@@ -61,23 +61,28 @@ namespace HungarianMethod
                 printMatrixString(fullMatrix);
 
                 string[,] stringMatrixThroughPhases = new string[globalRows - 1, globalColumns - 1];
-                if (minimization.Checked == true)
+                if (minimization.Checked == true) { 
+                    Console.WriteLine("Matrica bez prve kolone i vrste\n");
                     stringMatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
+                    printMatrixString(stringMatrixThroughPhases);
+                }
                 else if(maximization.Checked == true)
                 {
                     stringMatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
                     int[,] intMatrixThroughPhases = ConvertStringMatrixToIntMatrix(stringMatrixThroughPhases);
                     intMatrixThroughPhases = MultiplyWithMinusOne(intMatrixThroughPhases);
                     stringMatrixThroughPhases = ConvertIntMatrixToStringMatrix(intMatrixThroughPhases);
+                    printMatrixString(stringMatrixThroughPhases);
                 }
 
                 //Console.WriteLine("Pocetna matrica");
                 //printMatrixString(stringMatrixThroughPhases);
 
                 string[,] solution = FirstStepHungarianMethod(stringMatrixThroughPhases);
+                printMatrixString(stringMatrixThroughPhases);
+
                 solution = OtherStepsHungarianMethod(solution);
-                //Console.WriteLine("Posle prve iteracije madjarskog metoda");
-                //printMatrixString(solution);
+                printMatrixString(solution);
                 int i = 1;
                 while (i <= 10)
                 {
@@ -87,14 +92,14 @@ namespace HungarianMethod
                     else
                     {
                         solution = OtherStepsHungarianMethod(solution);
-                        //printMatrixString(solution);
+                        printMatrixString(solution);
                         i++;
                     }
 
                 }
 
                 //solution = FindIndependentZeros(solution);
-                printMatrixString(solution);
+                //printMatrixString(solution);
                 //bool hasinde = CheckIfAllRowsHaveIndependentZero(solution);
                 //Console.WriteLine(hasinde.ToString());
 
@@ -157,24 +162,24 @@ namespace HungarianMethod
             //-----> 2. Odredjivanje nezavisne nule <-----//
             //string[,] stringMatrixThroughPhases = ConvertIntMatrixToStringMatrix(matrixThroughPhases);
             stringMatrixThroughPhases = FindIndependentZeros(stringMatrixThroughPhases);
-            //printMatrixString(stringMatrixThroughPhases);
+            printMatrixString(stringMatrixThroughPhases);
             //-----> 3. Oznaciti sve vrste koje nemaju nezavisne 0 <-----//
             List<int> markedRows = MarkRowsWithoutIndependentZero(stringMatrixThroughPhases);
             //printMatrixString(stringMatrixThroughPhases);
             //-----> 4. Precrtati sve kolone koje imaju nulu u oznacenim redovima. <-----//
             List<int> scratchedColumns = MarkColsWhereRowIsZero(stringMatrixThroughPhases, markedRows);
             stringMatrixThroughPhases = ScratchColsWhereRowIsZero(stringMatrixThroughPhases, scratchedColumns);
-            //printMatrixString(stringMatrixThroughPhases);
+            printMatrixString(stringMatrixThroughPhases);
             //-----> 5. Oznaciti sve vrste koje imaju nezavisnu nulu u precrtanim kolonama. <-----//
             List<int> AllMarkedRows = MarkRowsWithIndependentZerosInScratchedCols(stringMatrixThroughPhases, scratchedColumns, markedRows);
             //printMatrixString(stringMatrixThroughPhases);
             //-----> 6. Precrtati sve neoznacene kolone. <-----//
             stringMatrixThroughPhases = ScratchUnmarkedColumns(stringMatrixThroughPhases, AllMarkedRows);
-            //printMatrixString(stringMatrixThroughPhases);
+            printMatrixString(stringMatrixThroughPhases);
             //-----> 7. Sve neprecrtane smanjujemo za vrednost najmanjeg broja od neprecrtanih,
             //dok vrednost na preseku precrtane kol i reda povecavamo za taj broj. <-----//
             stringMatrixThroughPhases = TransformationWithMinimumValue(stringMatrixThroughPhases);
-            //printMatrixString(stringMatrixThroughPhases);
+            printMatrixString(stringMatrixThroughPhases);
 
             return stringMatrixThroughPhases;
         }
