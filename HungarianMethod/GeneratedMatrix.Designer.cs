@@ -29,8 +29,8 @@ namespace HungarianMethod
         /// </summary>
         private void InitializeComponent()
         {
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.minimization = new System.Windows.Forms.RadioButton();
+            this.maximization = new System.Windows.Forms.RadioButton();
             this.btn_solve = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btn_back = new System.Windows.Forms.Button();
@@ -38,27 +38,27 @@ namespace HungarianMethod
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // radioButton1
+            // minimization
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(18, 256);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(286, 35);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Minimization problem";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.minimization.AutoSize = true;
+            this.minimization.Location = new System.Drawing.Point(18, 256);
+            this.minimization.Name = "minimization";
+            this.minimization.Size = new System.Drawing.Size(286, 35);
+            this.minimization.TabIndex = 0;
+            this.minimization.TabStop = true;
+            this.minimization.Text = "Minimization problem";
+            this.minimization.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // maximization
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(18, 316);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(293, 35);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Maximization problem";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.maximization.AutoSize = true;
+            this.maximization.Location = new System.Drawing.Point(18, 316);
+            this.maximization.Name = "maximization";
+            this.maximization.Size = new System.Drawing.Size(293, 35);
+            this.maximization.TabIndex = 1;
+            this.maximization.TabStop = true;
+            this.maximization.Text = "Maximization problem";
+            this.maximization.UseVisualStyleBackColor = true;
             // 
             // btn_solve
             // 
@@ -124,8 +124,8 @@ namespace HungarianMethod
             this.Controls.Add(this.btn_back);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_solve);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
+            this.Controls.Add(this.maximization);
+            this.Controls.Add(this.minimization);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "GeneratedMatrix";
@@ -138,8 +138,8 @@ namespace HungarianMethod
 
         #endregion
 
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton minimization;
+        private System.Windows.Forms.RadioButton maximization;
         private System.Windows.Forms.Button btn_solve;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btn_back;

@@ -79,6 +79,12 @@
     <Compile Include="QuickTip.Designer.cs">
       <DependentUpon>QuickTip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Solution.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Solution.Designer.cs">
+      <DependentUpon>Solution.cs</DependentUpon>
+    </Compile>
     <Compile Include="SplashScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +109,9 @@
     </Compile>
     <EmbeddedResource Include="QuickTip.resx">
       <DependentUpon>QuickTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Solution.resx">
+      <DependentUpon>Solution.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>

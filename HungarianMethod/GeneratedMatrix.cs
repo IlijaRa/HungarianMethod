@@ -55,40 +55,76 @@ namespace HungarianMethod
         {
             if (CheckIfValuesAreIntParsable())
             {
-                int[,] matrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
-                //-----> 1. Transformacija koef. matrice <-----//
-                matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Rows);
-                matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Columns);
 
-                //-----> 2. Odredjivanje nezavisne nule <-----//
-                string[,] stringMatrixThroughPhases = ConvertIntMatrixToStringMatrix(matrixThroughPhases);
-                stringMatrixThroughPhases = FindIndependentZeros(stringMatrixThroughPhases);
+                string[,] fullMatrix = GenerateFullMatrix(globalRows, globalColumns);
+                Console.WriteLine("Kompletna matrica\n");
+                printMatrixString(fullMatrix);
 
-                //-----> 3. Oznaciti sve vrste koje nemaju nezavisne 0 <-----//
-                List<int> markedRows = MarkRowsWithoutIndependentZero(stringMatrixThroughPhases);
+                string[,] stringMatrixThroughPhases = new string[globalRows - 1, globalColumns - 1];
+                if (minimization.Checked == true)
+                    stringMatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
+                else if(maximization.Checked == true)
+                {
+                    stringMatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
+                    int[,] intMatrixThroughPhases = ConvertStringMatrixToIntMatrix(stringMatrixThroughPhases);
+                    intMatrixThroughPhases = MultiplyWithMinusOne(intMatrixThroughPhases);
+                    stringMatrixThroughPhases = ConvertIntMatrixToStringMatrix(intMatrixThroughPhases);
+                }
 
-                //-----> 4. Precrtati sve kolone koje imaju nulu u oznacenim redovima. <-----//
-                List<int> scratchedColumns = MarkColsWhereRowIsZero(stringMatrixThroughPhases, markedRows);
-                stringMatrixThroughPhases = ScratchColsWhereRowIsZero(stringMatrixThroughPhases, scratchedColumns);
+                //Console.WriteLine("Pocetna matrica");
+                //printMatrixString(stringMatrixThroughPhases);
 
-                //-----> 5. Oznaciti sve vrste koje imaju nezavisnu nulu u precrtanim kolonama. <-----//
-                List<int> AllMarkedRows = MarkRowsWithIndependentZerosInScratchedCols(stringMatrixThroughPhases, scratchedColumns, markedRows);
+                string[,] solution = FirstStepHungarianMethod(stringMatrixThroughPhases);
+                solution = OtherStepsHungarianMethod(solution);
+                //Console.WriteLine("Posle prve iteracije madjarskog metoda");
+                //printMatrixString(solution);
+                int i = 1;
+                while (i <= 10)
+                {
+                    string[,] matrix = FindIndependentZeros(solution);
+                    if (CheckIfAllRowsHaveIndependentZero(matrix) == true)
+                        break;
+                    else
+                    {
+                        solution = OtherStepsHungarianMethod(solution);
+                        //printMatrixString(solution);
+                        i++;
+                    }
 
-                //-----> 6. Precrtati sve neoznacene kolone. <-----//
-                stringMatrixThroughPhases = ScratchUnmarkedColumns(stringMatrixThroughPhases, AllMarkedRows);
+                }
 
-                //-----> 7. Sve neprecrtane smanjujemo za vrednost najmanjeg broja od neprecrtanih,
-                //dok vrednost na preseku precrtane kol i reda povecavamo za taj broj. <-----//
-                stringMatrixThroughPhases = SubtractMinimumWithUnscratchedValues(stringMatrixThroughPhases);
-                stringMatrixThroughPhases = AddMinimumToCrossScratchPositions(stringMatrixThroughPhases);
-                stringMatrixThroughPhases = RewriteOneTimeScratchPositions(stringMatrixThroughPhases);
+                //solution = FindIndependentZeros(solution);
+                printMatrixString(solution);
+                //bool hasinde = CheckIfAllRowsHaveIndependentZero(solution);
+                //Console.WriteLine(hasinde.ToString());
+
+                Solution solutionForm = new Solution();
+                solutionForm.GenerateFormWithMatrix(globalRows, globalColumns);
+                // full matrica sadrzi i nazive prve kolone i prve vrste (A,B,C,D,E, 1, 2, 3, 4, 5...)
+                solutionForm.TransferSolutionWithFullMatrix(fullMatrix, solution);
+                solutionForm.Show();
+                //PaintIndependentZeros(solution);
+                //this.Hide();
 
 
-                printMatrixString(stringMatrixThroughPhases);
             }
             else
                 MessageBox.Show("Denied");
         }
+
+        //public void PaintIndependentZeros(string[,] solution)
+        //{
+        //    for (int i = 0; i < solution.GetLength(0); i++)
+        //    {
+        //        for (int j = 0; j < solution.GetLength(1); j++)
+        //        {
+        //            if (solution[i, j] == "/O/")
+        //            {
+        //                globalTextboxes[(i+2) * (j+2)].BackColor = Color.Red;
+        //            }
+        //        }
+        //    }
+        //}
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -96,57 +132,73 @@ namespace HungarianMethod
             tip.Show();
         }
 
-        //public void HungarianMethod(int[,] matrixThroughPhases)
-       //{
-            ////-----> 1. Transformacija koef. matrice <-----//
-            //matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Rows);
-            //matrixThroughPhases = CalculateZerosByAxis(matrixThroughPhases, Axis.Columns);
+        public int[,] MultiplyWithMinusOne(int[,] matrix)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    matrix[i, j] = matrix[i, j] * -1;
+                }
+            }
+            return matrix;
+        }
 
-            ////-----> 2. Odredjivanje nezavisne nule <-----//
+        public string[,] FirstStepHungarianMethod(string[,] stringMatrixThroughPhases)
+        {
+            //-----> 1. Transformacija koef. matrice <-----//
+            stringMatrixThroughPhases = CalculateZerosByAxis(stringMatrixThroughPhases, Axis.Rows);
+            stringMatrixThroughPhases = CalculateZerosByAxis(stringMatrixThroughPhases, Axis.Columns);
+            return stringMatrixThroughPhases;
+        }
+        public string[,] OtherStepsHungarianMethod(string[,] stringMatrixThroughPhases)
+        {
+
+            //-----> 2. Odredjivanje nezavisne nule <-----//
             //string[,] stringMatrixThroughPhases = ConvertIntMatrixToStringMatrix(matrixThroughPhases);
-            //stringMatrixThroughPhases = FindIndependentZeros(stringMatrixThroughPhases);
+            stringMatrixThroughPhases = FindIndependentZeros(stringMatrixThroughPhases);
+            //printMatrixString(stringMatrixThroughPhases);
+            //-----> 3. Oznaciti sve vrste koje nemaju nezavisne 0 <-----//
+            List<int> markedRows = MarkRowsWithoutIndependentZero(stringMatrixThroughPhases);
+            //printMatrixString(stringMatrixThroughPhases);
+            //-----> 4. Precrtati sve kolone koje imaju nulu u oznacenim redovima. <-----//
+            List<int> scratchedColumns = MarkColsWhereRowIsZero(stringMatrixThroughPhases, markedRows);
+            stringMatrixThroughPhases = ScratchColsWhereRowIsZero(stringMatrixThroughPhases, scratchedColumns);
+            //printMatrixString(stringMatrixThroughPhases);
+            //-----> 5. Oznaciti sve vrste koje imaju nezavisnu nulu u precrtanim kolonama. <-----//
+            List<int> AllMarkedRows = MarkRowsWithIndependentZerosInScratchedCols(stringMatrixThroughPhases, scratchedColumns, markedRows);
+            //printMatrixString(stringMatrixThroughPhases);
+            //-----> 6. Precrtati sve neoznacene kolone. <-----//
+            stringMatrixThroughPhases = ScratchUnmarkedColumns(stringMatrixThroughPhases, AllMarkedRows);
+            //printMatrixString(stringMatrixThroughPhases);
+            //-----> 7. Sve neprecrtane smanjujemo za vrednost najmanjeg broja od neprecrtanih,
+            //dok vrednost na preseku precrtane kol i reda povecavamo za taj broj. <-----//
+            stringMatrixThroughPhases = TransformationWithMinimumValue(stringMatrixThroughPhases);
+            //printMatrixString(stringMatrixThroughPhases);
 
-            ////-----> 3. Oznaciti sve vrste koje nemaju nezavisne 0 <-----//
-            //List<int> markedRows = MarkRowsWithoutIndependentZero(stringMatrixThroughPhases);
+            return stringMatrixThroughPhases;
+        }
 
-            ////-----> 4. Precrtati sve kolone koje imaju nulu u oznacenim redovima. <-----//
-            //List<int> scratchedColumns = MarkColsWhereRowIsZero(stringMatrixThroughPhases, markedRows);
-            //stringMatrixThroughPhases = ScratchColsWhereRowIsZero(stringMatrixThroughPhases, scratchedColumns);
-
-            ////-----> 5. Oznaciti sve vrste koje imaju nezavisnu nulu u precrtanim kolonama. <-----//
-            //List<int> AllMarkedRows = MarkRowsWithIndependentZerosInScratchedCols(stringMatrixThroughPhases, scratchedColumns, markedRows);
-
-            ////-----> 6. Precrtati sve neoznacene kolone. <-----//
-            //stringMatrixThroughPhases = ScratchUnmarkedColumns(stringMatrixThroughPhases, AllMarkedRows);
-
-            ////-----> 7. Sve neprecrtane smanjujemo za vrednost najmanjeg broja od neprecrtanih,
-            ////dok vrednost na preseku precrtane kol i reda povecavamo za taj broj. <-----//
-            //stringMatrixThroughPhases = SubtractMinimumWithUnscratchedValues(stringMatrixThroughPhases);
-            //stringMatrixThroughPhases = AddMinimumToCrossScratchPositions(stringMatrixThroughPhases);
-            //stringMatrixThroughPhases = RewriteOneTimeScratchPositions(stringMatrixThroughPhases);
-
-            // konvertovanje nazad u int matricu
-            //matrixThroughPhases = ConvertStringMatrixToIntMatrix(stringMatrixThroughPhases);
-            //stringMatrixThroughPhases = striHungarianMethod(solution);
-        //}
-
-        //public bool CheckIfAllRowsHaveIndependentZero(string[,] matrix)
-        //{
-        //    bool rowHasIndependentZero = false;
-        //    for (int i = 0; i < matrix.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < matrix.GetLength(0); j++)
-        //        {
-        //            if (matrix[i, j] == "/O/")
-        //                rowHasIndependentZero = true;
-        //        }
-
-        //        if (rowHasIndependentZero == false)
-        //            break;
-        //    }
-
-        //    return rowHasIndependentZero;
-        //} 
+        public bool CheckIfAllRowsHaveIndependentZero(string[,] matrix)
+        {
+            bool rowHasIndependentZero = true;
+            int counter = 0;
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    if (matrix[i, j] == "/O/")
+                        counter++;
+                }
+                if (counter == 0)
+                {
+                    rowHasIndependentZero = false;
+                    break;
+                }
+                counter = 0;
+            }
+            return rowHasIndependentZero;
+        }
 
         // podesavanje velicine i rasporeda elemenata na osnovu broja redova i kolona
         // podesava i velicinu forme 
@@ -160,8 +212,8 @@ namespace HungarianMethod
                     break;
                 case 4:
                     Size = new Size(670, 550);
-                    radioButton1.Location = new Point(18, 310);
-                    radioButton2.Location = new Point(18, 360);
+                    minimization.Location = new Point(18, 310);
+                    maximization.Location = new Point(18, 360);
                     btn_back.Location = new Point(12, 448);
                     btn_solve.Location = new Point(257, 448);
                     btn_reset.Location = new Point(505, 448);
@@ -169,8 +221,8 @@ namespace HungarianMethod
                     break;
                 case 5:
                     Size = new Size(670, 650);
-                    radioButton1.Location = new Point(18, 410);
-                    radioButton2.Location = new Point(18, 460);
+                    minimization.Location = new Point(18, 410);
+                    maximization.Location = new Point(18, 460);
                     btn_back.Location = new Point(12, 548);
                     btn_solve.Location = new Point(257, 548);
                     btn_reset.Location = new Point(505, 548);
@@ -179,8 +231,8 @@ namespace HungarianMethod
                 case 6:
                     Size = new Size(770, 700);
                     label1.Location = new Point(320, 9);
-                    radioButton1.Location = new Point(18, 460);
-                    radioButton2.Location = new Point(18, 510);
+                    minimization.Location = new Point(18, 460);
+                    maximization.Location = new Point(18, 510);
                     btn_back.Location = new Point(12, 598);
                     btn_solve.Location = new Point(315, 598);
                     btn_reset.Location = new Point(605, 598);
@@ -199,6 +251,20 @@ namespace HungarianMethod
             {
                 textboxes.Add(new TextBox());
             }
+            textboxes[0].Text = "\\";
+
+            textboxes[1].Text = "A";
+            textboxes[2].Text = "B";
+            textboxes[3].Text = "C";
+            textboxes[4].Text = "D";
+            textboxes[5].Text = "E";
+
+            textboxes[6].Text = "1";
+            textboxes[12].Text = "2";
+            textboxes[18].Text = "3";
+            textboxes[24].Text = "4";
+            textboxes[30].Text = "5";
+
             textboxes[7].Text = "10";
             textboxes[8].Text = "4";
             textboxes[9].Text = "6";
@@ -324,13 +390,13 @@ namespace HungarianMethod
         }
 
         // formira matricu vrednosti koje smo uneli ali bez vrednosti plavih textboxeva; znaci dimenzije umanjene za 1
-        public int[,] GenerateStartMatrix(int rows, int columns)
+        public string[,] GenerateStartMatrix(int rows, int columns)
         {
             int arrayCounter = 0;
-            int[] validValues = MakingArrayOfActualValues(rows, columns);
+            string[] validValues = MakingArrayOfActualValues(rows, columns);
 
             // dimenzije umanjene za 1 jer ne racuna polja koja imaju plavu boju
-            int[,] startMatrix = new int[rows - 1, columns - 1];
+            string[,] startMatrix = new string[rows - 1, columns - 1];
 
             for (int i = 0; i < rows - 1; i++)
             {
@@ -338,26 +404,45 @@ namespace HungarianMethod
                 {
                     startMatrix[i, j] = validValues[arrayCounter];
                     arrayCounter++;
-                    //Console.Write(startMatrix[i, j] + "\t");
                 }
-                //Console.WriteLine("\n");
+
             }
 
-            //printMatrix(startMatrix);
+            return startMatrix;
+        }
+
+        public string[,] GenerateFullMatrix(int rows, int columns)
+        {
+            int arrayCounter = 0;
+
+            string[] validValues = MakingArrayOfAllValues(rows, columns);
+
+            // dimenzije umanjene za 1 jer ne racuna polja koja imaju plavu boju
+            string[,] startMatrix = new string[rows, columns];
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    startMatrix[i, j] = validValues[arrayCounter];
+                    arrayCounter++;
+                }
+
+            }
 
             return startMatrix;
         }
 
         // pravi niz od vrednosti u testboxevima koji nisu plave boje
-        public int[] MakingArrayOfActualValues(int rows, int columns)
+        public string[] MakingArrayOfActualValues(int rows, int columns)
         {
-            int[] actualValues = new int[rows * columns];
+            string[] actualValues = new string[rows * columns];
             int valuesCounter = 0;
             foreach (var textbox in globalTextboxes)
             {
                 if (textbox.BackColor != Color.LightBlue)
                 {
-                    actualValues[valuesCounter] = Convert.ToInt32(textbox.Text);
+                    actualValues[valuesCounter] = textbox.Text;
                     valuesCounter++;
                 }
             }
@@ -365,9 +450,25 @@ namespace HungarianMethod
             return actualValues;
         }
 
+        public string[] MakingArrayOfAllValues(int rows, int columns)
+        {
+            string[] actualValues = new string[rows * columns];
+            int valuesCounter = 0;
+            foreach (var textbox in globalTextboxes)
+            {
+                //if (textbox.BackColor != Color.LightBlue)
+                //{
+                    actualValues[valuesCounter] = textbox.Text;
+                    valuesCounter++;
+                //}
+            }
+
+            return actualValues;
+        }
+
         // Funkcija prima matricu i axis koji govori
         // da li ce resavati nule po rows ili columns
-        public int[,] CalculateZerosByAxis(int[,] matrix, Axis axis)
+        public string[,] CalculateZerosByAxis(string[,] matrix, Axis axis)
         {
             // transponuje
             if (axis == Axis.Columns)
@@ -376,17 +477,30 @@ namespace HungarianMethod
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 //trazi minimum po svakom redu
-                int min = matrix[i, 0];
+                int min = Convert.ToInt32(matrix[i, 0]);
                 for (int j = 0; j < matrix.GetLength(0); j++)
                 {
-                    if (matrix[i, j] < min)
-                        min = matrix[i, j];
+                    int value = -10;
+                    int.TryParse(matrix[i, j], out value);
+                    if (value != -10)
+                    {
+                        if (value < min) // Convert.ToInt32(matrix[i, j]) umesto value
+                            min = value;
+                    }
+                    else
+                        MessageBox.Show("Bad parsing!");
                 }
 
                 //radi razliku vrednosti sa min
+                int matrix_value = -10;
                 for (int j = 0; j < matrix.GetLength(0); j++)
                 {
-                    matrix[i, j] -= min;
+                    int.TryParse(matrix[i, j], out matrix_value);
+                    //matrix_value = value;//Convert.ToInt32(matrix[i, j]);
+                    if (matrix_value != -10) {
+                        matrix_value = matrix_value - min;
+                        matrix[i, j] = matrix_value.ToString();
+                    }
                 }
             }
 
@@ -399,12 +513,12 @@ namespace HungarianMethod
         }
 
         // funkcija koja transponuje matricu
-        public int[,] Transpose(int[,] matrix)
+        public string[,] Transpose(string[,] matrix)
         {
             int w = matrix.GetLength(0);
             int h = matrix.GetLength(1);
 
-            int[,] result = new int[h, w];
+            string[,] result = new string[h, w];
 
             for (int i = 0; i < w; i++)
             {
@@ -494,7 +608,7 @@ namespace HungarianMethod
                     // prolazi kroz vrstu i broji koliko nula ima u njoj
                     for (int j = 0; j < stringMatrix.GetLength(0); j++)
                     {
-                        if (stringMatrix[i, j] == "0")
+                        if (stringMatrix[i, j] == "0" || stringMatrix[i, j] == "∅")
                         {
                             zeroCounter++;
                         }
@@ -666,11 +780,13 @@ namespace HungarianMethod
             return matrix;
         }
 
-        public string[,] SubtractMinimumWithUnscratchedValues(string[,] matrix)
+        public string[,] TransformationWithMinimumValue(string[,] matrix)
         {
-            string[,] subtractedMatrix = SubtractValues(matrix, FindMinimum(matrix));
-
-            return subtractedMatrix;
+            int min = FindMinimum(matrix);
+            string[,] transformedMatrix = SubtractValues(matrix, min);
+            transformedMatrix = AddMinimumToCrossScratchPositions(transformedMatrix, min);
+            transformedMatrix = RewriteOneTimeScratchPositions(transformedMatrix);
+            return transformedMatrix;
         }
 
 
@@ -742,9 +858,8 @@ namespace HungarianMethod
             return matrix;
         }
 
-        public string[,] AddMinimumToCrossScratchPositions(string[,] matrix)
+        public string[,] AddMinimumToCrossScratchPositions(string[,] matrix, int minValue)
         {
-            int minValue = FindMinimum(matrix);
             int matrix_value = 0;
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
@@ -757,19 +872,19 @@ namespace HungarianMethod
                     {
                         if (matrix[i, j] == "----/O/----" || matrix[i, j] == "----∅----")
                         {
-                            matrix_value = 0;
                             matrix_value = matrix_value + minValue;
                             matrix[i, j] = matrix_value.ToString();
+                            matrix_value = 0;
                         }
 
                         else //if(matrix[i, j].StartsWith("----") && matrix[i, j].EndsWith("----"))
                         {
-                            // otklanjamo crtice iz zapisa kako bi prebacili u int
-                            //string substring = matrix[i, j].Remove(0, 4); // uklanja prve ---- iz broja
-                            string substring = matrix[i, j].Substring(4);
+                            // otklanjamo crtice iz zapisa kako bi prebacili u int da bi mogli da saberemo
+                            string substring = matrix[i, j].Substring(4);// uklanja prve ---- iz broja
                             substring = substring.Remove(substring.Length - 4); // uklanja poslednje ---- broja
                             matrix_value = Convert.ToInt32(substring) + minValue;
                             matrix[i, j] = matrix_value.ToString();
+                            matrix_value = 0;
                         }
                     }
                 }

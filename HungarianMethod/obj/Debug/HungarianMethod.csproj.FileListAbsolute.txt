@@ -26,3 +26,4 @@ D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Debug\WinFormAnimat
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.SplashScreen.resources
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.csproj.CopyComplete
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.QuickTip.resources
+D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Debug\HungarianMethod.Solution.resources
