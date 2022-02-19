@@ -128,13 +128,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="images\generatedMatrixBackground6x6.png" />
-    <None Include="images\generatedMatrixBackground4x4.png" />
-    <Content Include="images\logo.png" />
     <None Include="Resources\generatedMatrixBackground5x5.png" />
-    <None Include="images\generatedMatrixBackground3x3.png" />
-    <None Include="images\generatedMatrixBackground5x5.png" />
-    <Content Include="images\introBackground.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
