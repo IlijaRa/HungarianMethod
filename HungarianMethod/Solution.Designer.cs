@@ -47,7 +47,7 @@ namespace HungarianMethod
             // 
             // richTextBox1
             // 
-            this.richTextBox1.BackColor = System.Drawing.Color.Plum;
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.richTextBox1.Enabled = false;
             this.richTextBox1.Location = new System.Drawing.Point(244, 54);
             this.richTextBox1.Name = "richTextBox1";
@@ -57,6 +57,7 @@ namespace HungarianMethod
             // 
             // Z
             // 
+            this.Z.BackColor = System.Drawing.Color.LightCoral;
             this.Z.Enabled = false;
             this.Z.Location = new System.Drawing.Point(244, 281);
             this.Z.Name = "Z";
@@ -67,7 +68,6 @@ namespace HungarianMethod
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::HungarianMethod.Properties.Resources.generatedMatrixBackground3x3;
             this.ClientSize = new System.Drawing.Size(671, 417);
             this.Controls.Add(this.Z);
             this.Controls.Add(this.richTextBox1);

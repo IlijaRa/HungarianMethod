@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HungarianMethod
@@ -18,34 +10,49 @@ namespace HungarianMethod
             InitializeComponent();
         }
 
-        // Dugme continue koje pritiska korisnik kada je uneo zeljeni broj kolona i redova
         private void ButtonContinue(object sender, EventArgs e)
         {
             if (IsInputValid(Textbox1.Text, Textbox2.Text))
             {
                 int rows = Convert.ToInt32(Textbox1.Text);
-                int columns = Convert.ToInt32(Textbox2.Text); 
+                int columns = Convert.ToInt32(Textbox2.Text);
                 if (AreDimensionsValid(rows, columns))
                 {
-                    if(AreRowsColsEqual(rows, columns))
+                    if (AreRowsColsEqual(rows, columns))
                     {
-                        GeneratedMatrix gen = new GeneratedMatrix();
-                        gen.GenerateFormWithMatrix(rows, columns);
-                        gen.Show();
-                        this.Hide();
+                        if (IsTypeOfProblemChosen() == true)
+                        {
+                            GeneratedMatrix gen = new GeneratedMatrix(rows, columns, TypeOfProblem());
+                            gen.Show();
+                            this.Hide();
+                        }
+                        else
+                            MessageBox.Show("You have to choose what is the type of problem!");
                     }
                     else
                         MessageBox.Show("Matrix need to be squared!");
                 }
                 else
-                    MessageBox.Show("Values for rows and columns can be only [4, 6] !");
+                    MessageBox.Show("Values for rows and columns need to be larger that 1 !");
             }
             else
-                MessageBox.Show("Bad input values!");
+                MessageBox.Show("Values need to be integer!");
 
         }
 
-        // funkcija koja proverava da li je dobar unos (los je ako nije celobrojna vrednost)
+        // this function is used to propagate a string value "Minimization"
+        // if minimization problem is checked, otherwise the string value "Maximization"
+        public string TypeOfProblem()
+        {
+            string type = "";
+            if (minimization.Checked == true)
+                type = "Minimization";
+            else
+                type = "Maximization";
+            return type;
+        }
+
+        // check if entered values are integer
         public bool IsInputValid(string rows, string columns)
         {
             bool inputValid = false;
@@ -60,18 +67,18 @@ namespace HungarianMethod
             return inputValid;
         }
 
-        // proverava da li je celobrojna vrednost u rasponu od 3 do 6
-        // ukljucujuci i te vrednosti
+        // check if dimensions are valid, need to be larger that 1x1 matrix
         public bool AreDimensionsValid(int rows, int columns)
         {
             bool valueValid = false;
-            if ((rows >= 4 && rows <= 6) && (columns >= 4 && columns <= 6))
+            if ((rows >= 2) && (columns >= 2))
             {
                 valueValid = true;
             }
             return valueValid;
         }
 
+        // check if rows and columns are the same value
         public bool AreRowsColsEqual(int rows, int columns)
         {
             bool valueValid = false;
@@ -82,9 +89,15 @@ namespace HungarianMethod
             return valueValid;
         }
 
-        private void buttonX(object sender, EventArgs e)
+        // check if minimization or maximization is chosen
+        public bool IsTypeOfProblemChosen()
         {
-            Application.ExitThread();
+            bool isChecked = true;
+            if (minimization.Checked == false && maximization.Checked == false)
+            {
+                isChecked = false;
+            }
+            return isChecked;
         }
     }
 }

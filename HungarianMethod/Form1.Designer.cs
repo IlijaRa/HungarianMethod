@@ -34,6 +34,8 @@ namespace HungarianMethod
             this.Continue = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.Textbox2 = new System.Windows.Forms.TextBox();
+            this.maximization = new System.Windows.Forms.RadioButton();
+            this.minimization = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // Textbox1
@@ -43,7 +45,6 @@ namespace HungarianMethod
             this.Textbox1.Name = "Textbox1";
             this.Textbox1.Size = new System.Drawing.Size(154, 38);
             this.Textbox1.TabIndex = 0;
-            this.Textbox1.Text = "6";
             // 
             // label1
             // 
@@ -57,13 +58,14 @@ namespace HungarianMethod
             // 
             // Continue
             // 
+            this.Continue.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.Continue.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Continue.Location = new System.Drawing.Point(137, 143);
+            this.Continue.Location = new System.Drawing.Point(137, 264);
             this.Continue.Name = "Continue";
             this.Continue.Size = new System.Drawing.Size(153, 48);
             this.Continue.TabIndex = 2;
             this.Continue.Text = "Continue";
-            this.Continue.UseVisualStyleBackColor = true;
+            this.Continue.UseVisualStyleBackColor = false;
             this.Continue.Click += new System.EventHandler(this.ButtonContinue);
             // 
             // label2
@@ -83,15 +85,40 @@ namespace HungarianMethod
             this.Textbox2.Name = "Textbox2";
             this.Textbox2.Size = new System.Drawing.Size(154, 38);
             this.Textbox2.TabIndex = 3;
-            this.Textbox2.Text = "6";
+            // 
+            // maximization
+            // 
+            this.maximization.AutoSize = true;
+            this.maximization.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maximization.Location = new System.Drawing.Point(68, 199);
+            this.maximization.Name = "maximization";
+            this.maximization.Size = new System.Drawing.Size(293, 35);
+            this.maximization.TabIndex = 6;
+            this.maximization.TabStop = true;
+            this.maximization.Text = "Maximization problem";
+            this.maximization.UseVisualStyleBackColor = true;
+            // 
+            // minimization
+            // 
+            this.minimization.AutoSize = true;
+            this.minimization.BackColor = System.Drawing.SystemColors.Control;
+            this.minimization.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.minimization.Location = new System.Drawing.Point(68, 139);
+            this.minimization.Name = "minimization";
+            this.minimization.Size = new System.Drawing.Size(286, 35);
+            this.minimization.TabIndex = 5;
+            this.minimization.TabStop = true;
+            this.minimization.Text = "Minimization problem";
+            this.minimization.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::HungarianMethod.Properties.Resources.introBackground;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(434, 211);
+            this.ClientSize = new System.Drawing.Size(434, 339);
+            this.Controls.Add(this.maximization);
+            this.Controls.Add(this.minimization);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Textbox2);
             this.Controls.Add(this.Continue);
@@ -115,6 +142,8 @@ namespace HungarianMethod
         private System.Windows.Forms.Button Continue;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox Textbox2;
+        private System.Windows.Forms.RadioButton maximization;
+        private System.Windows.Forms.RadioButton minimization;
     }
 }
 
