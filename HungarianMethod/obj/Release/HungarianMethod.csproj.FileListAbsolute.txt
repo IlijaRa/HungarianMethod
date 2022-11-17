@@ -1,5 +1,3 @@
-D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Release\HungarianMethod.exe.config
-D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Release\HungarianMethod.exe
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Release\HungarianMethod.pdb
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Release\SplashScreen.dll
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Release\WinFormAnimation.dll
@@ -12,6 +10,8 @@ D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMe
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMethod.csproj.GenerateResource.cache
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMethod.csproj.CoreCompileInputs.cache
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMethod.csproj.CopyComplete
-D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMethod.exe
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMethod.pdb
+D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Release\HungarianMethod.exe.config
+D:\GitHubRepositories\OperationsResearch\HungarianMethod\bin\Release\HungarianMethod.exe
 D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMethod.csproj.SuggestedBindingRedirects.cache
+D:\GitHubRepositories\OperationsResearch\HungarianMethod\obj\Release\HungarianMethod.exe

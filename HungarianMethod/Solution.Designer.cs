@@ -33,13 +33,14 @@ namespace HungarianMethod
             this.label1 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.Z = new System.Windows.Forms.TextBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(294, 9);
+            this.label1.Location = new System.Drawing.Point(353, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(92, 31);
@@ -49,10 +50,9 @@ namespace HungarianMethod
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.richTextBox1.Enabled = false;
-            this.richTextBox1.Location = new System.Drawing.Point(244, 54);
+            this.richTextBox1.Location = new System.Drawing.Point(240, 43);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(187, 221);
+            this.richTextBox1.Size = new System.Drawing.Size(318, 140);
             this.richTextBox1.TabIndex = 8;
             this.richTextBox1.Text = "";
             // 
@@ -60,16 +60,27 @@ namespace HungarianMethod
             // 
             this.Z.BackColor = System.Drawing.Color.LightCoral;
             this.Z.Enabled = false;
-            this.Z.Location = new System.Drawing.Point(244, 281);
+            this.Z.Location = new System.Drawing.Point(240, 190);
             this.Z.Name = "Z";
-            this.Z.Size = new System.Drawing.Size(187, 38);
+            this.Z.Size = new System.Drawing.Size(318, 38);
             this.Z.TabIndex = 9;
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.richTextBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.richTextBox2.Location = new System.Drawing.Point(0, 237);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(792, 359);
+            this.richTextBox2.TabIndex = 11;
+            this.richTextBox2.Text = "";
             // 
             // Solution
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(671, 417);
+            this.ClientSize = new System.Drawing.Size(792, 596);
+            this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.Z);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.label1);
@@ -88,5 +99,6 @@ namespace HungarianMethod
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.TextBox Z;
+        private System.Windows.Forms.RichTextBox richTextBox2;
     }
 }

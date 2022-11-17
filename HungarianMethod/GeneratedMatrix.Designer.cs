@@ -98,6 +98,7 @@ namespace HungarianMethod
             this.Name = "GeneratedMatrix";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "GeneratedMatrix";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExitApplication);
             this.ResumeLayout(false);
             this.PerformLayout();
 

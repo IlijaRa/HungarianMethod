@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace HungarianMethod
@@ -12,31 +13,36 @@ namespace HungarianMethod
 
         private void ButtonContinue(object sender, EventArgs e)
         {
-            if (IsInputValid(Textbox1.Text, Textbox2.Text))
+            if (CheckIfAllFieldsHaveValue())
             {
-                int rows = Convert.ToInt32(Textbox1.Text);
-                int columns = Convert.ToInt32(Textbox2.Text);
-                if (AreDimensionsValid(rows, columns))
+                if (CheckIfValuesAreIntParsable())
                 {
-                    if (AreRowsColsEqual(rows, columns))
+                    int rows = Convert.ToInt32(Textbox1.Text);
+                    int columns = Convert.ToInt32(Textbox2.Text);
+                    if (AreDimensionsValid(rows, columns))
                     {
-                        if (IsTypeOfProblemChosen() == true)
+                        if (AreRowsColsEqual(rows, columns))
                         {
-                            GeneratedMatrix gen = new GeneratedMatrix(rows, columns, TypeOfProblem());
-                            gen.Show();
-                            this.Hide();
+                            if (IsTypeOfProblemChosen() == true)
+                            {
+                                GeneratedMatrix gen = new GeneratedMatrix(rows, columns, TypeOfProblem());
+                                gen.Show();
+                                this.Hide();
+                            }
+                            else
+                                MessageBox.Show("You have to choose what is the type of the problem!");
                         }
                         else
-                            MessageBox.Show("You have to choose what is the type of the problem!");
+                            MessageBox.Show("Matrix need to be squared!");
                     }
                     else
-                        MessageBox.Show("Matrix need to be squared!");
+                        MessageBox.Show("Values for rows and columns need to be larger that 1 !");
                 }
                 else
-                    MessageBox.Show("Values for rows and columns need to be larger that 1 !");
+                    MessageBox.Show("Values need to be integer!");
             }
             else
-                MessageBox.Show("Values need to be integer!");
+                MessageBox.Show("You need to populate all fields!");
 
         }
 
@@ -52,14 +58,27 @@ namespace HungarianMethod
             return type;
         }
 
+        public bool CheckIfAllFieldsHaveValue()
+        {
+            bool result = false;
+
+            if (Textbox1.Text != "" && Textbox2.Text != "")
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+
         // check if entered values are integer
-        public bool IsInputValid(string rows, string columns)
+        public bool CheckIfValuesAreIntParsable()
         {
             bool inputValid = false;
             int nrows = 0;
             int ncol = 0;
-            int.TryParse(rows, out nrows);
-            int.TryParse(columns, out ncol);
+            int.TryParse(Textbox1.Text, out nrows);
+            int.TryParse(Textbox2.Text, out ncol);
             if (nrows != 0 && ncol != 0)
             {
                 inputValid = true;
@@ -98,6 +117,11 @@ namespace HungarianMethod
                 isChecked = false;
             }
             return isChecked;
+        }
+
+        private void ExitApplication(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

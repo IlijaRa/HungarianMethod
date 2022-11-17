@@ -13,6 +13,7 @@ namespace HungarianMethod
         int globalRows;
         int globalColumns;
         string globalTypeOfProblem = "";
+        string steps = "";
 
         public GeneratedMatrix(int rows, int columns, string typeOfProblem)
         {
@@ -93,64 +94,72 @@ namespace HungarianMethod
 
         private void buttonReset(object sender, EventArgs e)
         {
-            foreach (var textbox in globalTextboxes)
-                textbox.Clear();
+            GeneratedMatrix gen_mat = new GeneratedMatrix(globalRows, globalColumns, globalTypeOfProblem);
+            gen_mat.Show();
+            this.Hide();
+
+            //foreach (var textbox in globalTextboxes)
+            //    textbox.Clear();
         }
 
         private void buttonSolve(object sender, EventArgs e)
         {
-            Console.Clear();
-
-            if (CheckIfValuesAreIntParsable())
+            //Console.Clear();
+            
+            if (CheckIfAllFieldsHaveValue())
             {
-
-                string[,] fullMatrix = GenerateFullMatrix(globalRows, globalColumns);
-                printMatrixString(fullMatrix, "Full matrix:\n");
-
-                string[,] MatrixThroughPhases = new string[globalRows - 1, globalColumns - 1];
-
-                if (globalTypeOfProblem.Equals("Minimization"))
+                if (CheckIfValuesAreIntParsable())
                 {
-                    MatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
-                }
-                else if (globalTypeOfProblem.Equals("Maximization"))
-                {
-                    MatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
-                    int[,] intMatrixThroughPhases = ConvertStringMatrixToIntMatrix(MatrixThroughPhases);
-                    intMatrixThroughPhases = MultiplyWithMinusOne(intMatrixThroughPhases);
-                    MatrixThroughPhases = ConvertIntMatrixToStringMatrix(intMatrixThroughPhases);
-                }
+                    string[,] fullMatrix = GenerateFullMatrix(globalRows, globalColumns);
+                    printMatrixString(fullMatrix, "Full matrix:\n");
 
-                printMatrixString(MatrixThroughPhases, "Matrix without first row and first column:\n");
+                    string[,] MatrixThroughPhases = new string[globalRows - 1, globalColumns - 1];
 
-
-                string[,] solution = FirstStepHungarianMethod(MatrixThroughPhases);
-                solution = OtherStepsHungarianMethod(solution);
-
-                int i = 1;
-                while (i <= 10)
-                {
-                    string[,] matrix = FindIndependentZeros(solution);
-                    if (CheckIfAllRowsHaveIndependentZero(matrix) == true)
-                        break;
-                    else
+                    if (globalTypeOfProblem.Equals("Minimization"))
                     {
-                        solution = OtherStepsHungarianMethod(solution);
-                        i++;
+                        MatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
+                    }
+                    else if (globalTypeOfProblem.Equals("Maximization"))
+                    {
+                        MatrixThroughPhases = GenerateStartMatrix(globalRows, globalColumns);
+                        int[,] intMatrixThroughPhases = ConvertStringMatrixToIntMatrix(MatrixThroughPhases);
+                        intMatrixThroughPhases = MultiplyWithMinusOne(intMatrixThroughPhases);
+                        MatrixThroughPhases = ConvertIntMatrixToStringMatrix(intMatrixThroughPhases);
                     }
 
-                }
-                solution = FindIndependentZeros(solution);
-                solution = ClearFinalMatrix(solution);
-                printMatrixString(solution, "Final result:\n");
-                PaintIndependentZerosInMatrix(solution);
+                    printMatrixString(MatrixThroughPhases, "Matrix without first row and first column:\n");
 
-                Solution solutionForm = new Solution();
-                solutionForm.TransferSolutionWithFullMatrix(fullMatrix, solution);
-                solutionForm.Show();
+
+                    string[,] solution = FirstStepHungarianMethod(MatrixThroughPhases);
+                    solution = OtherStepsHungarianMethod(solution);
+
+                    int i = 1;
+                    while (i <= 10)
+                    {
+                        string[,] matrix = FindIndependentZeros(solution);
+                        if (CheckIfAllRowsHaveIndependentZero(matrix) == true)
+                            break;
+                        else
+                        {
+                            solution = OtherStepsHungarianMethod(solution);
+                            i++;
+                        }
+
+                    }
+                    solution = FindIndependentZeros(solution);
+                    solution = ClearFinalMatrix(solution);
+                    printMatrixString(solution, "Final result:\n");
+                    PaintIndependentZerosInMatrix(solution);
+
+                    Solution solutionForm = new Solution(steps);
+                    solutionForm.TransferSolutionWithFullMatrix(fullMatrix, solution);
+                    solutionForm.ShowDialog();
+                }
+                else
+                    MessageBox.Show("You need to provide an integer input values.");
             }
-            else
-                MessageBox.Show("Denied");
+             else
+                MessageBox.Show("You need to populate all fields.");
         }
 
         public int[,] MultiplyWithMinusOne(int[,] matrix)
@@ -183,24 +192,24 @@ namespace HungarianMethod
 
             //-----> 3. Step <-----//
             List<int> markedRows = MarkRowsWithoutIndependentZero(stringMatrixThroughPhases);
-            Console.WriteLine("------>Marked rows without independent zero in it<------\n");
+            //Console.WriteLine("------>Marked rows without independent zero in it<------\n");
 
             //-----> 4. Step <-----//
             List<int> scratchedColumns = MarkColsWhereRowIsZero(stringMatrixThroughPhases, markedRows);
             stringMatrixThroughPhases = ScratchColsWhereRowIsZero(stringMatrixThroughPhases, scratchedColumns);
-            printMatrixString(stringMatrixThroughPhases, "Scratched columns where row has value zero:");
+            printMatrixString(stringMatrixThroughPhases, "Scratched columns where row has value zero:\n");
 
             //-----> 5. Step <-----//
             List<int> AllMarkedRows = MarkRowsWithIndependentZerosInScratchedCols(stringMatrixThroughPhases, scratchedColumns, markedRows);
-            Console.WriteLine("------>Marked rows where scratched columns have independent zero<------\n");
+            //Console.WriteLine("------>Marked rows where scratched columns have independent zero<------\n");
 
             //-----> 6. Step <-----//
             stringMatrixThroughPhases = ScratchUnmarkedRows(stringMatrixThroughPhases, AllMarkedRows);
-            printMatrixString(stringMatrixThroughPhases, "Scratched all unmarked rows:");
+            printMatrixString(stringMatrixThroughPhases, "Scratched all unmarked rows:\n");
 
             //-----> 7. Step <-----//
             stringMatrixThroughPhases = TransformationWithMinimumValue(stringMatrixThroughPhases);
-            printMatrixString(stringMatrixThroughPhases, "Min value of unscratched values is subtracted from all unscratched values, and added to all cross-scratched values:");
+            printMatrixString(stringMatrixThroughPhases, "Min value of unscratched values is subtracted from all unscratched values, and added to all cross-scratched values:\n");
 
             return stringMatrixThroughPhases;
         }
@@ -268,6 +277,21 @@ namespace HungarianMethod
                 }
             }
             return valuesAreValid;
+        }
+
+        public bool CheckIfAllFieldsHaveValue()
+        {
+            int counter = 0; 
+            foreach (var textbox in globalTextboxes)
+            {
+                if (textbox.Text == "")
+                {
+                    counter++;
+                }
+            }
+
+            if (counter == 0) return true;
+            else return false;
         }
 
         // Forms a matrix of values ​​we entered but without the values ​​of the pink/gray-blue textboxes; it means that dimensions are reduced by 1
@@ -422,18 +446,24 @@ namespace HungarianMethod
         // print matrix in the console with forwarded message
         public void printMatrixString(string[,] matrix, string message)
         {
-            Console.WriteLine(message);
+            steps += message;
+            //Console.WriteLine(message);
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < matrix.GetLength(0); j++)
                 {
-                    Console.Write(matrix[i, j] + "\t");
+                    //Console.Write(matrix[i, j] + "\t");
+                    steps += matrix[i, j] + "\t";
                 }
-                Console.WriteLine("\n");
+                //Console.WriteLine("\n");
+                steps += "\n";
             }
-            Console.WriteLine("\n");
-            Console.WriteLine("-----------------------------------------------------------------");
-            Console.WriteLine("\n");
+            //Console.WriteLine("\n");
+            //Console.WriteLine("-----------------------------------------------------------------");
+            //Console.WriteLine("\n");
+            steps += "\n";
+            steps += "------------------------";
+            steps += "\n";
         }
 
         public string[,] ConvertIntMatrixToStringMatrix(int[,] matrix)
@@ -772,6 +802,11 @@ namespace HungarianMethod
                 }
             }
             return matrix;
+        }
+
+        private void ExitApplication(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

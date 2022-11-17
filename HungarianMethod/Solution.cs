@@ -5,9 +5,10 @@ namespace HungarianMethod
 {
     public partial class Solution : Form
     {
-        public Solution()
+        public Solution(string steps)
         {
             InitializeComponent();
+            richTextBox2.Text = steps;
         }
 
         // this function transfer full matrix, result matrix (with independent zeros in all rows and columns) and calculate the result
