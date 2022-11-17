@@ -2,7 +2,7 @@ For complete explanation visit this link : https://byjus.com/maths/hungarian-met
 ## Explanation of the method
 The Hungarian method is a computational optimization technique that addresses the assignment problem in polynomial time and foreshadows following primal-dual alternatives. In 1955, Harold Kuhn used the term “Hungarian method” to honour two Hungarian mathematicians, Dénes Kőnig and Jenő Egerváry. Let’s go through the steps of the Hungarian method with the help of a solved example.
 
-## Hungarian Method Steps
+## Hungarian method steps
 Check to see if the number of rows and columns are equal; if they are, the assignment problem is considered to be balanced. Then go to step 1. If it is not balanced, it should be balanced before the algorithm is applied.
 
 Step number  | Explanation
