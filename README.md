@@ -16,9 +16,9 @@ Step 6  | Find the lowest cost factor that is not covered by the straight lines.
 Step 7  | Continue with steps 1 – 6 until you’ve found the highest suitable assignment.
 
 ## Examples:
-(https://www.brainkart.com/article/Solution-of-assignment-problems-(Hungarian-Method)_39044/)
-(http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/hungar.htm)
-(http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/assmax.htm)
+https://www.brainkart.com/article/Solution-of-assignment-problems-(Hungarian-Method)_39044/
+http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/hungar.htm
+http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/assmax.htm
 
 
 ## Quick project review:
