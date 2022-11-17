@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using static WinFormAnimation.AnimationFunctions;
 
 namespace HungarianMethod
 {
@@ -140,6 +141,7 @@ namespace HungarianMethod
 
                 }
                 solution = FindIndependentZeros(solution);
+                solution = ClearFinalMatrix(solution);
                 printMatrixString(solution, "Final result:\n");
                 PaintIndependentZerosInMatrix(solution);
 
@@ -399,6 +401,22 @@ namespace HungarianMethod
                 }
             }
 
+        }
+
+        // function clears final matrix in a way where symbol "∅" is replaced with "0" (zero)
+        // this is a glitch that happened in a previous steps of the algorithm and this is the way to fix it
+        public string[,] ClearFinalMatrix(string[,] matrix)
+        {
+            for (int row = 0; row < matrix.GetLength(0); row++)
+            {
+                for (int col = 0; col < matrix.GetLength(0); col++)
+                {
+                    if (matrix[row, col].Equals("∅"))
+                        matrix[row, col] = "0";
+                }
+            }
+
+            return matrix;
         }
 
         // print matrix in the console with forwarded message

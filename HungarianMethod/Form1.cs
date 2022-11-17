@@ -27,7 +27,7 @@ namespace HungarianMethod
                             this.Hide();
                         }
                         else
-                            MessageBox.Show("You have to choose what is the type of problem!");
+                            MessageBox.Show("You have to choose what is the type of the problem!");
                     }
                     else
                         MessageBox.Show("Matrix need to be squared!");
