@@ -29,6 +29,7 @@ namespace HungarianMethod
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GeneratedMatrix));
             this.btn_solve = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btn_back = new System.Windows.Forms.Button();
@@ -92,6 +93,7 @@ namespace HungarianMethod
             this.Controls.Add(this.btn_back);
             this.Controls.Add(this.btn_solve);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "GeneratedMatrix";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
