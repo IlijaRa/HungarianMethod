@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31911.196
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HungarianMethod", "HungarianMethod\HungarianMethod.csproj", "{AB3B1DB5-AEB0-45A1-9645-AD979CDA86D2}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HungarianMethodSetup", "HungarianMethodSetup\HungarianMethodSetup.vdproj", "{A318B153-D0C0-4C32-9A86-30051126F11F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{AB3B1DB5-AEB0-45A1-9645-AD979CDA86D2}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{AB3B1DB5-AEB0-45A1-9645-AD979CDA86D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB3B1DB5-AEB0-45A1-9645-AD979CDA86D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A318B153-D0C0-4C32-9A86-30051126F11F}.Debug|Any CPU.ActiveCfg = Release
+		{A318B153-D0C0-4C32-9A86-30051126F11F}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
