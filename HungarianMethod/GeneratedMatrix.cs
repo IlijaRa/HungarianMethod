@@ -104,7 +104,7 @@ namespace HungarianMethod
 
         private void buttonSolve(object sender, EventArgs e)
         {
-            //Console.Clear();
+            ClearPaintedIndependetZeros(); // In case if there was calculation before
             
             if (CheckIfAllFieldsHaveValue())
             {
@@ -257,6 +257,17 @@ namespace HungarianMethod
             }
         }
 
+        public void ClearPaintedIndependetZeros()
+        {
+            foreach (var textbox in globalTextboxes)
+            {
+                if (textbox.BackColor == Color.FromArgb(0, 120, 215))
+                {
+                    textbox.BackColor = Color.White;
+                }
+            }
+        }
+
         // Checks whether the entered values ​​can be converted to int values
         public bool CheckIfValuesAreIntParsable()
         {
@@ -268,8 +279,7 @@ namespace HungarianMethod
                     textbox.BackColor != Color.FromArgb(240, 128, 128) &&
                     textbox.BackColor != Color.FromArgb(227, 227, 227))
                 {
-                    int.TryParse(textbox.Text, out result);
-                    if (result == 0)
+                    if (!int.TryParse(textbox.Text, out result))
                     {
                         valuesAreValid = false;
                         break;
@@ -398,9 +408,8 @@ namespace HungarianMethod
             int min = Convert.ToInt32(matrix[row, 0]);
             for (int j = 0; j < matrix.GetLength(0); j++)
             {
-                int value = -10;
-                int.TryParse(matrix[row, j], out value);
-                if (value != -10)
+                int value;
+                if (int.TryParse(matrix[row, j].ToString(), out value))
                 {
                     if (value < min)
                         min = value;
