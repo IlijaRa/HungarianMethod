@@ -21,8 +21,8 @@ Step 7  | Continue with steps 1 – 6 until you’ve found the highest suitable 
 * http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/assmax.htm
 
 ## Software deficiencies:
-* Software doesn't work for unbalanced problems (rows and cols are different).
-* It happens sometimes that result isn't correct, because independent zero wasn't choosen as it should be (Step 3).
+* Software doesn't work for unbalanced problems (when number of rows and columns is different).
+* It happens sometimes (rarely) that result isn't correct, because independent zero wasn't choosen as it should be (Step 3).
 
 ## Used technology:
 * Windows forms
