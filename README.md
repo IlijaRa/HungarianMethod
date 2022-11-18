@@ -16,13 +16,16 @@ Step 6  | Find the lowest cost factor that is not covered by the straight lines.
 Step 7  | Continue with steps 1 – 6 until you’ve found the highest suitable assignment.
 
 ## Examples:
-https://www.brainkart.com/article/Solution-of-assignment-problems-(Hungarian-Method)_39044/
-http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/hungar.htm
-http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/assmax.htm
+* https://www.brainkart.com/article/Solution-of-assignment-problems-(Hungarian-Method)_39044/
+* http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/hungar.htm
+* http://www.universalteacherpublications.com/univ/ebooks/or/Ch6/assmax.htm
 
-## Software bugz:
+## Software deficiencies:
 * Software doesn't work for unbalanced problems (rows and cols are different).
 * It happens sometimes that result isn't correct, because independent zero wasn't choosen as it should be (Step 3).
+
+## Used technology:
+* Windows forms
 
 ## Quick project review:
 https://user-images.githubusercontent.com/64584067/202577689-21c18ed3-928e-454d-bea6-67e32314b7fc.mp4
